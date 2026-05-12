@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 :root {
-  --bg: #ffffff; --bg-2: #f9fafb; --bg-3: #f3f4f6;
+  --bg: #ffffff; --bg-2: #f9fafb; --bg-3: #f3f4f6; --bg-4: #e9eaec;
   --border: #e5e7eb; --border-input: #d1d5db;
   --text: #111827; --text-2: #6b7280; --text-3: #9ca3af;
   --primary: #18181b; --primary-fg: #ffffff;
@@ -17,48 +18,99 @@
   --danger: #dc2626; --danger-bg: #fef2f2; --danger-border: #fecaca;
   --warning: #d97706; --warning-bg: #fffbeb; --warning-border: #fde68a;
   --info: #2563eb; --info-bg: #eff6ff; --info-border: #bfdbfe;
-  --merchant: #7c3aed; --merchant-bg: #f5f3ff; --merchant-border: #ddd6fe;
-  --gold-c: #B8860B; --silver-c: #6b7280; --copper-c: #b45309;
-  --r: 6px; --r-lg: 10px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08);
-  --font: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  --merch: #7c3aed; --merch-bg: #f5f3ff; --merch-border: #ddd6fe;
+  --wip-bg: #fefce8; --wip-border: #fde047; --wip-text: #854d0e;
+  --gold-c: #b8860b; --silver-c: #71717a; --copper-c: #b45309;
+  --r: 6px; --r-lg: 10px; --r-xl: 14px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --font: 'Geist', -apple-system, sans-serif;
   --mono: 'Geist Mono', monospace;
 }
-body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; min-height: 100vh; }
+[data-theme="dark"] {
+  --bg: #1a1a1a; --bg-2: #222222; --bg-3: #2a2a2a; --bg-4: #333333;
+  --border: #3a3a3a; --border-input: #444444;
+  --text: #f0f0f0; --text-2: #a0a0a0; --text-3: #666666;
+  --primary: #e8e8e8; --primary-fg: #111111;
+  --success: #4ade80; --success-bg: #052e16; --success-border: #166534;
+  --danger: #f87171; --danger-bg: #2d0a0a; --danger-border: #7f1d1d;
+  --warning: #fbbf24; --warning-bg: #2d1a00; --warning-border: #78350f;
+  --info: #60a5fa; --info-bg: #0a1628; --info-border: #1e3a5f;
+  --merch: #a78bfa; --merch-bg: #1a0f2e; --merch-border: #4c1d95;
+  --wip-bg: #1c1a00; --wip-border: #854d0e; --wip-text: #fbbf24;
+  --gold-c: #f0c040; --silver-c: #b0b0b0; --copper-c: #e07040;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3); --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+}
 
+body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; min-height: 100vh; transition: background .2s, color .2s; }
+
+/* ── WIP Banner ── */
+.wip-banner {
+  background: var(--wip-bg); border-bottom: 2px solid var(--wip-border);
+  padding: 12px 24px; display: flex; align-items: flex-start; gap: 12px;
+}
+.wip-banner-in { max-width: 1140px; margin: 0 auto; display: flex; align-items: flex-start; gap: 12px; width: 100%; }
+.wip-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.wip-text { color: var(--wip-text); font-size: 13px; line-height: 1.6; }
+.wip-text strong { font-weight: 600; display: block; margin-bottom: 2px; font-size: 14px; }
+
+/* ── Header ── */
 header { border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 50; }
-.hdr { max-width: 1140px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+.hdr { max-width: 1140px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
 .logo-icon { width: 30px; height: 30px; background: var(--primary); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
 .logo-icon svg { width: 16px; height: 16px; }
 .logo-name { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; }
 .logo-tld { color: var(--text-2); font-weight: 400; }
+.hdr-right { display: flex; align-items: center; gap: 8px; }
 .hdr-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; background: var(--bg-3); color: var(--text-2); border: 1px solid var(--border); font-family: var(--mono); }
+.theme-btn { width: 34px; height: 34px; border-radius: var(--r); border: 1px solid var(--border); background: var(--bg-2); color: var(--text-2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.theme-btn:hover { background: var(--bg-3); color: var(--text); }
+.theme-btn svg { width: 15px; height: 15px; }
 
+/* ── Hero ── */
 .hero { background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 28px 24px 24px; }
 .hero-in { max-width: 1140px; margin: 0 auto; }
 .hero h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 5px; }
-.hero p { color: var(--text-2); font-size: 13px; max-width: 500px; }
+.hero p { color: var(--text-2); font-size: 13px; max-width: 520px; }
 .pills { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
 .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text-2); }
 .pill svg { width: 11px; height: 11px; }
 
+/* ── Layout ── */
 .main { max-width: 1140px; margin: 0 auto; padding: 24px 24px 60px; }
 
+/* ── Section wrapper ── */
+.section-wrap {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+.section-wrap-title {
+  font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--text-3); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+
+/* ── Card ── */
 .card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow); overflow: hidden; }
-.card-hdr { padding: 14px 18px; border-bottom: 1px solid var(--border); background: var(--bg-2); }
+.card-hdr { padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg-2); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .card-title { font-size: 13px; font-weight: 600; }
 .card-desc { font-size: 12px; color: var(--text-2); margin-top: 1px; }
-.card-body { padding: 18px; }
+.card-body { padding: 16px; }
 
+/* ── Tabs ── */
 .tabs { display: flex; background: var(--bg-3); border-radius: var(--r); padding: 3px; gap: 2px; width: fit-content; margin-bottom: 22px; }
-.tab { padding: 6px 16px; font-size: 13px; font-weight: 500; border: none; background: transparent; color: var(--text-2); border-radius: 4px; cursor: pointer; transition: all 0.12s; display: flex; align-items: center; gap: 6px; font-family: var(--font); }
+.tab { padding: 6px 16px; font-size: 13px; font-weight: 500; border: none; background: transparent; color: var(--text-2); border-radius: 4px; cursor: pointer; transition: all .12s; display: flex; align-items: center; gap: 6px; font-family: var(--font); }
 .tab:hover { color: var(--text); }
-.tab.active { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.tab.active { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.12); }
 .tab svg { width: 13px; height: 13px; }
 .panel { display: none; }
 .panel.active { display: block; }
 
+/* ── Forms ── */
 textarea, input[type=text], input[type=number], select {
   width: 100%; font-family: var(--font); font-size: 13px; color: var(--text);
   background: var(--bg); border: 1px solid var(--border-input); border-radius: var(--r);
@@ -66,10 +118,31 @@ textarea, input[type=text], input[type=number], select {
 }
 textarea { resize: vertical; min-height: 88px; font-family: var(--mono); font-size: 12px; line-height: 1.65; }
 textarea:focus, input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(24,24,27,.08); }
-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
+select { cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
 
+/* ── GSC input ── */
+.gsc-input-group { display: flex; align-items: center; gap: 4px; }
+.gsc-field { display: flex; align-items: center; gap: 3px; background: var(--bg); border: 1px solid var(--border-input); border-radius: var(--r); padding: 4px 8px; transition: border-color .15s, box-shadow .15s; }
+.gsc-field:focus-within { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(24,24,27,.08); }
+.gsc-field input { border: none !important; box-shadow: none !important; padding: 0 !important; width: 42px !important; text-align: right; font-family: var(--mono); font-size: 13px; background: transparent; }
+.gsc-field input::-webkit-inner-spin-button, .gsc-field input::-webkit-outer-spin-button { opacity: 1; }
+.coin { width: 16px; height: 16px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0; }
+.coin-g { background: radial-gradient(circle at 35% 35%, #ffe066, #b8860b); box-shadow: 0 1px 3px rgba(184,134,11,.5); }
+.coin-s { background: radial-gradient(circle at 35% 35%, #e8e8e8, #888); box-shadow: 0 1px 3px rgba(100,100,100,.4); }
+.coin-c { background: radial-gradient(circle at 35% 35%, #f0a060, #b45309); box-shadow: 0 1px 3px rgba(180,83,9,.4); }
+
+/* ── GSC display ── */
+.gsc-display { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 12px; }
+.gsc-part { display: inline-flex; align-items: center; gap: 2px; }
+.gsc-g-val { color: var(--gold-c); font-weight: 600; }
+.gsc-s-val { color: var(--silver-c); font-weight: 500; }
+.gsc-c-val { color: var(--copper-c); }
+
+/* ── Buttons ── */
 .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; font-size: 13px; font-weight: 500; border-radius: var(--r); border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; transition: all .12s; white-space: nowrap; font-family: var(--font); }
-.btn:hover { background: var(--bg-2); }
+.btn:hover { background: var(--bg-3); }
 .btn svg { width: 13px; height: 13px; }
 .btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
 .btn-primary:hover { opacity: .87; background: var(--primary); }
@@ -78,40 +151,46 @@ select { cursor: pointer; appearance: none; background-image: url("data:image/sv
 .btn-ghost:hover { background: var(--bg-3); }
 .btn-del { color: var(--danger); border-color: var(--danger-border); }
 .btn-del:hover { background: var(--danger-bg); }
+.btn-warning { color: var(--warning); border-color: var(--warning-border); }
+.btn-warning:hover { background: var(--warning-bg); }
 
-.sec-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); margin-bottom: 7px; }
-hr.sep { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
-
-.alert { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; border-radius: var(--r); font-size: 13px; margin-bottom: 16px; }
-.alert svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
-.alert-info { background: var(--info-bg); border: 1px solid var(--info-border); color: var(--info); }
-
+/* ── Badge ── */
 .badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; }
 .badge svg { width: 9px; height: 9px; }
 .badge-ok { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
 .badge-no { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
 .badge-warn { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
-.badge-merch { background: var(--merchant-bg); color: var(--merchant); border: 1px solid var(--merchant-border); }
+.badge-merch { background: var(--merch-bg); color: var(--merch); border: 1px solid var(--merch-border); }
 
-/* Gold/Silver/Copper display */
-.gsc { display: inline-flex; align-items: center; gap: 3px; font-family: var(--mono); font-size: 12px; }
-.gsc-g { color: var(--gold-c); font-weight: 600; }
-.gsc-s { color: var(--silver-c); font-weight: 500; }
-.gsc-c { color: var(--copper-c); }
-.gsc-unit { font-size: 10px; font-weight: 600; margin-left: 1px; }
-.gsc-g .gsc-unit { color: var(--gold-c); }
-.gsc-s .gsc-unit { color: var(--silver-c); }
-.gsc-c .gsc-unit { color: var(--copper-c); }
+/* ── Info tooltip ── */
+.info-wrap { position: relative; display: inline-flex; }
+.info-btn { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--text-3); background: transparent; color: var(--text-3); font-size: 10px; font-weight: 700; cursor: default; display: flex; align-items: center; justify-content: center; flex-shrink: 0; line-height: 1; }
+.info-btn:hover { border-color: var(--info); color: var(--info); }
+.tooltip {
+  display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  background: var(--primary); color: var(--primary-fg); font-size: 12px; line-height: 1.5;
+  padding: 10px 13px; border-radius: var(--r-lg); width: 260px; z-index: 100;
+  box-shadow: var(--shadow-md); pointer-events: none;
+}
+.tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--primary); }
+.info-wrap:hover .tooltip { display: block; }
 
+/* ── Alert ── */
+.alert { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; border-radius: var(--r); font-size: 13px; margin-bottom: 16px; }
+.alert svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+.alert-info { background: var(--info-bg); border: 1px solid var(--info-border); color: var(--info); }
+
+/* ── Metrics ── */
 .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 10px; margin-bottom: 18px; }
-.metric { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 14px 16px; }
+.metric { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 14px 16px; box-shadow: var(--shadow); }
 .m-label { font-size: 11px; color: var(--text-2); font-weight: 500; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 5px; }
 .m-val { font-size: 22px; font-weight: 600; letter-spacing: -.03em; line-height: 1; }
 .m-val.ok { color: var(--success); }
 
-.tbl-wrap { border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+/* ── Table ── */
+.tbl-wrap { border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow); }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
-thead { background: var(--bg-2); }
+thead { background: var(--bg-3); }
 th { padding: 9px 14px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--text-2); border-bottom: 1px solid var(--border); white-space: nowrap; }
 td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
 tr:last-child td { border-bottom: none; }
@@ -120,40 +199,61 @@ tbody tr:hover td { background: var(--bg-2); }
 .pos { color: var(--success); font-weight: 600; }
 .neg { color: var(--danger); font-weight: 600; }
 
-.rc { border: 1px solid var(--border); border-radius: var(--r-lg); margin-bottom: 12px; overflow: hidden; }
-.rc-hdr { background: var(--bg-2); padding: 11px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
-.rc-body { padding: 14px 16px; }
+/* ── Recipe card ── */
+.rc { border: 1px solid var(--border); border-radius: var(--r-lg); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow); background: var(--bg); }
+.rc-hdr { background: var(--bg-3); padding: 11px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+.rc-body { padding: 14px 16px; background: var(--bg); }
 .ing-row { display: flex; gap: 7px; align-items: center; margin-bottom: 7px; flex-wrap: wrap; }
 .qty { width: 78px !important; text-align: right; font-family: var(--mono); }
 
-.merch-row { display: flex; gap: 7px; align-items: center; margin-bottom: 7px; flex-wrap: wrap; }
-.merch-price { width: 130px !important; font-family: var(--mono); }
+/* ── Merchant row ── */
+.merch-row { display: flex; gap: 7px; align-items: center; margin-bottom: 8px; flex-wrap: wrap; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 8px 10px; }
 
-.thr-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; padding: 13px 16px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); }
+/* ── Threshold ── */
+.thr-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; padding: 13px 16px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow); }
 .thr-row label { font-size: 13px; color: var(--text-2); white-space: nowrap; }
-.thr-input { width: 100px !important; font-family: var(--mono); }
 .sort-grp { display: flex; gap: 3px; }
 .sort-btn { font-size: 12px; padding: 5px 11px; }
 .sort-btn.active { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
 
+/* ── Status ── */
 .status { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-2); }
 .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
 
+/* ── Empty ── */
 .empty { text-align: center; padding: 40px 20px; color: var(--text-3); }
-.empty svg { width: 30px; height: 30px; margin: 0 auto 10px; display: block; opacity: .35; }
+.empty svg { width: 30px; height: 30px; margin: 0 auto 10px; display: block; opacity: .3; }
 
+/* ── Preview ── */
 .prev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
 .prev-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 13px; gap: 8px; }
 .prev-item:last-child { border-bottom: none; }
 
+/* ── Sec label ── */
+.sec-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); margin-bottom: 7px; }
+hr.sep { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+/* ── Footer ── */
 footer { border-top: 1px solid var(--border); padding: 18px 24px; text-align: center; font-size: 12px; color: var(--text-3); }
 footer strong { color: var(--text-2); }
 
-@media(max-width:700px){ .prev-grid{grid-template-columns:1fr;} .metrics{grid-template-columns:1fr 1fr;} .hdr-badge{display:none;} }
+@media(max-width:700px) { .prev-grid{grid-template-columns:1fr;} .metrics{grid-template-columns:1fr 1fr;} .hdr-badge{display:none;} }
 </style>
 </head>
 <body>
 
+<!-- WIP Banner -->
+<div class="wip-banner">
+  <div class="wip-banner-in">
+    <div class="wip-icon">🚧</div>
+    <div class="wip-text">
+      <strong>Site en cours de développement — Work In Progress</strong>
+      Cet outil utilise les données de l'hôtel des ventes de World of Warcraft, extraites via les listes personnelles de l'addon <strong>Auctionator</strong>. Il suffit d'exporter vos listes au format texte et de les coller dans les champs prévus à cet effet. De nouvelles fonctionnalités sont en cours de développement et seront ajoutées prochainement.
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
 <header>
   <div class="hdr">
     <a class="logo" href="#">
@@ -162,19 +262,27 @@ footer strong { color: var(--text-2); }
       </div>
       <span class="logo-name">ProfitForge<span class="logo-tld">.gg</span></span>
     </a>
-    <span class="hdr-badge">World of Warcraft · Craft Calculator</span>
+    <div class="hdr-right">
+      <span class="hdr-badge">World of Warcraft · Craft Calculator</span>
+      <button class="theme-btn" onclick="toggleTheme()" title="Changer de thème" id="theme-btn">
+        <svg id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
   </div>
 </header>
 
+<!-- Hero -->
 <div class="hero">
   <div class="hero-in">
     <h1>Calculateur de rentabilité craft</h1>
     <p>Importez vos prix depuis l'hôtel des ventes, définissez vos recettes, et identifiez instantanément les crafts les plus rentables.</p>
     <div class="pills">
-      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Commission HdV 5% incluse</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Commission HdV 5%</span>
       <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Ingrédients marchands</span>
       <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Seuil de rentabilité</span>
       <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Recettes sauvegardées</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07"/></svg>Via Auctionator</span>
     </div>
   </div>
 </div>
@@ -192,40 +300,65 @@ footer strong { color: var(--text-2); }
     </button>
   </div>
 
-  <!-- DONNÉES -->
+  <!-- ── DONNÉES ── -->
   <div id="panel-data" class="panel active">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
-      <div class="card">
-        <div class="card-hdr"><div class="card-title">Composants — Marché</div><div class="card-desc">CSV exporté depuis le jeu (volatil)</div></div>
-        <div class="card-body"><textarea id="csv-comp" placeholder='"Prix","Nom","Niveau d&apos;objet","Propriétaire ?","Disponible"&#10;100000,"Presque du porc",23,"",330025'></textarea></div>
+
+    <!-- Marché CSV -->
+    <div class="section-wrap">
+      <div class="section-wrap-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+        Données du marché
+        <div class="info-wrap">
+          <div class="info-btn">i</div>
+          <div class="tooltip">Collez ici le contenu de vos listes Auctionator exportées depuis le jeu. Format attendu : CSV avec "Prix","Nom",... La première zone est pour vos composants (matières premières), la seconde pour vos plats ou objets finis que vous souhaitez revendre.</div>
+        </div>
       </div>
-      <div class="card">
-        <div class="card-hdr"><div class="card-title">Plats finis — Marché</div><div class="card-desc">CSV exporté depuis le jeu (prix de vente)</div></div>
-        <div class="card-body"><textarea id="csv-prod" placeholder='"Prix","Nom","Niveau d&apos;objet","Propriétaire ?","Disponible"&#10;5000000,"Bento de champion",23,"",1200'></textarea></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="card">
+          <div class="card-hdr"><div><div class="card-title">Composants</div><div class="card-desc">Matières premières — prix volatils</div></div></div>
+          <div class="card-body"><textarea id="csv-comp" placeholder='"Prix","Nom","Niveau d&apos;objet","Propriétaire ?","Disponible"&#10;100000,"Presque du porc",23,"",330025'></textarea></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr"><div><div class="card-title">Plats / Objets finis</div><div class="card-desc">Prix de vente à l'HdV</div></div></div>
+          <div class="card-body"><textarea id="csv-prod" placeholder='"Prix","Nom","Niveau d&apos;objet","Propriétaire ?","Disponible"&#10;5000000,"Bento de champion",23,"",1200'></textarea></div>
+        </div>
       </div>
     </div>
 
-    <div class="card" style="margin-bottom:14px;">
-      <div class="card-hdr">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <div><div class="card-title">Ingrédients marchands</div><div class="card-desc">Prix fixes — achetés au PNJ, non affectés par le marché</div></div>
-          <span class="badge badge-merch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Prix fixes</span>
+    <!-- Ingrédients marchands -->
+    <div class="section-wrap">
+      <div class="section-wrap-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Ingrédients marchands — prix fixes
+        <span class="badge badge-merch" style="font-size:10px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="9" height="9"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Prix fixes
+        </span>
+        <div class="info-wrap">
+          <div class="info-btn">i</div>
+          <div class="tooltip">Ces ingrédients s'achètent auprès d'un PNJ marchand à prix fixe, sans fluctuation de marché. Saisissez leur prix en Or / Argent / Cuivre. Ils sont sauvegardés dans votre navigateur et disponibles dans toutes vos recettes. Le bouton "Réinitialiser" restaure la liste par défaut sans toucher à vos recettes.</div>
         </div>
-      </div>
-      <div class="card-body">
-        <div style="display:grid;grid-template-columns:1fr 160px 32px;gap:6px;margin-bottom:8px;padding:0 2px;">
-          <span class="sec-label">Nom de l'ingrédient</span>
-          <span class="sec-label">Prix (oo.aa.cc)</span>
-          <span></span>
-        </div>
-        <div id="merch-list"></div>
-        <button class="btn btn-sm" onclick="addMerchant()" style="margin-top:4px;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Ajouter un ingrédient marchand
+        <button class="btn btn-sm btn-warning" onclick="resetMerchants()" style="margin-left:auto;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5"/></svg>
+          Réinitialiser les prix marchands
         </button>
       </div>
+
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 100px 36px;gap:6px;align-items:center;padding:0 10px 6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);">
+        <span>Ingrédient</span>
+        <span style="display:flex;align-items:center;gap:4px;justify-content:center;"><div class="coin coin-g"></div> Or</span>
+        <span style="display:flex;align-items:center;gap:4px;justify-content:center;"><div class="coin coin-s"></div> Argent</span>
+        <span style="display:flex;align-items:center;gap:4px;justify-content:center;"><div class="coin coin-c"></div> Cuivre</span>
+        <span></span>
+      </div>
+      <div id="merch-list"></div>
+      <button class="btn btn-sm" onclick="addMerchant()" style="margin-top:6px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Ajouter un ingrédient marchand
+      </button>
     </div>
 
+    <!-- Import button -->
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
       <button class="btn btn-primary" onclick="parseAll()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-4.17"/></svg>
@@ -236,40 +369,61 @@ footer strong { color: var(--text-2); }
     <div id="preview"></div>
   </div>
 
-  <!-- RECETTES -->
+  <!-- ── RECETTES ── -->
   <div id="panel-recipes" class="panel">
-    <div class="alert alert-info">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span>Définissez vos recettes une fois. Sauvegardées automatiquement dans votre navigateur. Les ingrédients marchands s'affichent avec une étiquette violette.</span>
-    </div>
-    <div id="recipes-list"></div>
-    <button class="btn" onclick="addRecipe()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Ajouter une recette
-    </button>
-  </div>
-
-  <!-- RÉSULTATS -->
-  <div id="panel-results" class="panel">
-    <div class="thr-row">
-      <label>Seuil minimum</label>
-      <input type="text" class="thr-input" id="threshold" value="0.00.00" placeholder="0.00.00">
-      <label style="color:var(--text-3);font-size:12px;">oo.aa.cc</label>
-      <button class="btn btn-primary" onclick="calcResults()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        Calculer
-      </button>
-      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
-        <span style="font-size:12px;color:var(--text-2);">Trier :</span>
-        <div class="sort-grp">
-          <button class="btn sort-btn active" id="sort-profit" onclick="setSort('profit')">Profit</button>
-          <button class="btn sort-btn" id="sort-margin" onclick="setSort('margin')">Marge %</button>
-          <button class="btn sort-btn" id="sort-name" onclick="setSort('name')">Nom</button>
+    <div class="section-wrap">
+      <div class="section-wrap-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+        Gestion des recettes
+        <div class="info-wrap">
+          <div class="info-btn">i</div>
+          <div class="tooltip">Définissez chaque recette une seule fois : choisissez le plat fabriqué, indiquez la quantité produite, puis ajoutez chaque ingrédient avec sa quantité. Les ingrédients marchands (prix fixes) sont identifiés automatiquement en violet. Vos recettes sont sauvegardées dans votre navigateur.</div>
         </div>
       </div>
+      <div class="alert alert-info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>Importez d'abord vos données (onglet Données) pour que les listes déroulantes soient remplies. Les ingrédients marchands s'affichent avec une étiquette violette.</span>
+      </div>
+      <div id="recipes-list"></div>
+      <button class="btn" onclick="addRecipe()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Ajouter une recette
+      </button>
     </div>
-    <div class="metrics" id="metrics"></div>
-    <div id="results-table"></div>
+  </div>
+
+  <!-- ── RÉSULTATS ── -->
+  <div id="panel-results" class="panel">
+    <div class="section-wrap">
+      <div class="section-wrap-title">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Analyse de rentabilité
+        <div class="info-wrap">
+          <div class="info-btn">i</div>
+          <div class="tooltip">Le calcul déduit automatiquement 5% de commission HdV du prix de vente. Le seuil de rentabilité filtre les recettes en dessous d'un profit minimum. Survolez une ligne pour voir le détail des coûts par ingrédient. Les recettes avec des données manquantes s'affichent en orange.</div>
+        </div>
+      </div>
+
+      <div class="thr-row">
+        <label>Seuil de rentabilité minimum</label>
+        <div id="thr-gsc-input"></div>
+        <button class="btn btn-primary" onclick="calcResults()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Calculer
+        </button>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
+          <span style="font-size:12px;color:var(--text-2);">Trier :</span>
+          <div class="sort-grp">
+            <button class="btn sort-btn active" id="sort-profit" onclick="setSort('profit')">Profit</button>
+            <button class="btn sort-btn" id="sort-margin" onclick="setSort('margin')">Marge %</button>
+            <button class="btn sort-btn" id="sort-name" onclick="setSort('name')">Nom</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrics" id="metrics"></div>
+      <div id="results-table"></div>
+    </div>
   </div>
 </main>
 
@@ -282,72 +436,85 @@ footer strong { color: var(--text-2); }
 // ── State ──
 let comps = {}, prods = {}, merchants = [], recipes = [], sortBy = 'profit';
 
-// ── Default merchants (pre-registered) ──
-const DEFAULT_MERCHANTS = [
-  { name: 'Vin de cuisine',                  price: '0.10.10' },
-  { name: 'Un bon gros morceau de beurre',   price: '0.08.60' },
-  { name: 'Assortiments de légumes mûrs',    price: '0.11.25' },
-  { name: 'Ingrédients de taverne',          price: '0.10.00' },
-  { name: 'Herbes Thalassiennes',            price: '0.12.25' },
-  { name: 'Essence de wyrm de mana',         price: '0.07.70' },
-  { name: 'Sacoche d\'épices',               price: '0.10.75' },
+// ── Default merchants ──
+const DEFAULTS = [
+  { name: 'Vin de cuisine',                 g:0, s:10, c:10 },
+  { name: 'Un bon gros morceau de beurre',  g:0, s:8,  c:60 },
+  { name: 'Assortiments de légumes mûrs',   g:0, s:11, c:25 },
+  { name: 'Ingrédients de taverne',         g:0, s:10, c:0  },
+  { name: 'Herbes Thalassiennes',           g:0, s:12, c:25 },
+  { name: 'Essence de wyrm de mana',        g:0, s:7,  c:70 },
+  { name: 'Sacoche d\'épices',              g:0, s:10, c:75 },
 ];
 
-// ── Gold/Silver/Copper helpers ──
-// Parse "gg.ss.cc" string → total copper (integer)
-function parseGSC(str) {
-  if (str === null || str === undefined || str === '') return 0;
-  const s = String(str).trim();
-  // Handle plain number (copper from CSV: already divided by 10000 gives gold float)
-  // This is used when reading raw CSV prices (already in gold float)
-  if (!s.includes('.') || s.split('.').length === 2) {
-    // plain float gold value
-    const f = parseFloat(s);
-    return isNaN(f) ? 0 : Math.round(f * 10000);
-  }
-  // "gg.ss.cc" format
-  const parts = s.split('.');
-  if (parts.length === 3) {
-    const g = parseInt(parts[0]) || 0;
-    const si = parseInt(parts[1]) || 0;
-    const c = parseInt(parts[2]) || 0;
-    return g * 10000 + si * 100 + c;
-  }
-  return 0;
+// ── Theme ──
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('icon-moon').style.display = isDark ? 'block' : 'none';
+  document.getElementById('icon-sun').style.display  = isDark ? 'none'  : 'block';
+  try { localStorage.setItem('pf_theme', isDark ? 'light' : 'dark'); } catch(e){}
+}
+function loadTheme() {
+  try {
+    const t = localStorage.getItem('pf_theme');
+    if (t === 'dark') {
+      document.documentElement.setAttribute('data-theme','dark');
+      document.getElementById('icon-moon').style.display = 'none';
+      document.getElementById('icon-sun').style.display  = 'block';
+    }
+  } catch(e){}
 }
 
-// Parse CSV price (raw integer like 100000) → copper
-function csvPriceToCoppers(raw) {
+// ── GSC helpers ──
+function toCopper(g, s, c) { return (parseInt(g)||0)*10000 + (parseInt(s)||0)*100 + (parseInt(c)||0); }
+function fromCopper(cu) {
+  const abs = Math.abs(Math.round(cu||0));
+  return { g: Math.floor(abs/10000), s: Math.floor((abs%10000)/100), c: abs%100, neg: cu < 0 };
+}
+function csvToCopper(raw) {
   const n = parseFloat(String(raw).replace(/"/g,'').trim());
   return isNaN(n) ? 0 : Math.round(n);
 }
-
-// copper integer → display HTML
-function formatGSC(copper, colorClass) {
+function gscHTML(copper) {
   if (copper === null || copper === undefined) return '—';
-  const neg = copper < 0;
-  const abs = Math.abs(Math.round(copper));
-  const g = Math.floor(abs / 10000);
-  const s = Math.floor((abs % 10000) / 100);
-  const c = abs % 100;
+  const {g, s, c, neg} = fromCopper(copper);
   let parts = [];
-  if (g > 0) parts.push(`<span class="gsc-g">${g}<span class="gsc-unit">or</span></span>`);
-  if (s > 0 || g > 0) parts.push(`<span class="gsc-s">${s.toString().padStart(g>0?2:1,'0')}<span class="gsc-unit">ag</span></span>`);
-  parts.push(`<span class="gsc-c">${c.toString().padStart((g>0||s>0)?2:1,'0')}<span class="gsc-unit">cu</span></span>`);
-  return `<span class="gsc">${neg?'<span style="color:var(--danger)">−</span>':''}${parts.join(' ')}</span>`;
+  if (g > 0) parts.push(`<span class="gsc-part"><span class="gsc-g-val">${g}</span><span class="coin coin-g" style="width:13px;height:13px;margin-left:2px;"></span></span>`);
+  if (s > 0 || g > 0) parts.push(`<span class="gsc-part"><span class="gsc-s-val">${String(s).padStart(g>0?2:1,'0')}</span><span class="coin coin-s" style="width:13px;height:13px;margin-left:2px;"></span></span>`);
+  parts.push(`<span class="gsc-part"><span class="gsc-c-val">${String(c).padStart((g>0||s>0)?2:1,'0')}</span><span class="coin coin-c" style="width:13px;height:13px;margin-left:2px;"></span></span>`);
+  return `<span class="gsc-display">${neg?'<span style="color:var(--danger);margin-right:1px;">−</span>':''}${parts.join(' ')}</span>`;
 }
 
-// copper → short string for metrics
-function formatGSCText(copper) {
-  if (!copper && copper !== 0) return '—';
-  const neg = copper < 0;
-  const abs = Math.abs(Math.round(copper));
-  const g = Math.floor(abs / 10000);
-  const s = Math.floor((abs % 10000) / 100);
-  const c = abs % 100;
-  if (g > 0) return `${neg?'-':''}${g}or ${s}ag ${c}cu`;
-  if (s > 0) return `${neg?'-':''}${s}ag ${c}cu`;
-  return `${neg?'-':''}${c}cu`;
+// ── GSC 3-field input builder ──
+function makeGSCInput(idPrefix, g, s, c) {
+  return `<div class="gsc-input-group">
+    <div class="gsc-field">
+      <input type="number" id="${idPrefix}-g" min="0" value="${g||0}" style="width:42px;">
+      <div class="coin coin-g" title="Or"></div>
+    </div>
+    <div class="gsc-field">
+      <input type="number" id="${idPrefix}-s" min="0" max="99" value="${s||0}" style="width:42px;">
+      <div class="coin coin-s" title="Argent"></div>
+    </div>
+    <div class="gsc-field">
+      <input type="number" id="${idPrefix}-c" min="0" max="99" value="${c||0}" style="width:42px;">
+      <div class="coin coin-c" title="Cuivre"></div>
+    </div>
+  </div>`;
+}
+function readGSCInput(idPrefix) {
+  return toCopper(
+    document.getElementById(idPrefix+'-g')?.value||0,
+    document.getElementById(idPrefix+'-s')?.value||0,
+    document.getElementById(idPrefix+'-c')?.value||0
+  );
+}
+
+// Build threshold input
+function buildThrInput() {
+  document.getElementById('thr-gsc-input').innerHTML = makeGSCInput('thr', 0, 0, 0);
 }
 
 // ── Icons ──
@@ -369,137 +536,142 @@ function showTab(name, e) {
   if (name === 'results') calcResults();
 }
 
-// ── CSV parsing — stores prices in copper ──
-function split(line) {
-  const r = []; let c = '', q = false;
+// ── CSV parsing ──
+function splitCSV(line) {
+  const r=[]; let c='', q=false;
   for (let ch of line) {
-    if (ch === '"') { q = !q; c += ch; }
-    else if (ch === ',' && !q) { r.push(c); c = ''; }
-    else c += ch;
+    if (ch==='"'){q=!q;c+=ch;} else if(ch===','&&!q){r.push(c);c='';}else c+=ch;
   }
   r.push(c); return r;
 }
 function parseCSV(text) {
-  const lines = text.trim().split('\n').filter(l => l.trim());
+  const lines = text.trim().split('\n').filter(l=>l.trim());
   if (lines.length < 2) return {};
   const out = {};
   for (let i = 1; i < lines.length; i++) {
-    const p = split(lines[i]);
+    const p = splitCSV(lines[i]);
     if (p.length < 2) continue;
-    const copper = csvPriceToCoppers(p[0]);
+    const copper = csvToCopper(p[0]);
     const name = p[1].replace(/^"|"$/g,'').trim();
-    if (name) out[name.toLowerCase()] = { name, copper, src: 'market' };
+    if (name) out[name.toLowerCase()] = { name, copper, src:'market' };
   }
   return out;
 }
-
 function allComps() {
   const a = Object.assign({}, comps);
   merchants.forEach(m => {
-    if (m.name && m.price !== '') {
-      const copper = parseGSC(m.price);
-      a[m.name.toLowerCase().trim()] = { name: m.name, copper, src: 'merchant' };
+    if (m.name) {
+      const copper = toCopper(m.g, m.s, m.c);
+      a[m.name.toLowerCase().trim()] = { name:m.name, copper, src:'merchant' };
     }
   });
   return a;
 }
-
 function parseAll() {
   comps = parseCSV(document.getElementById('csv-comp').value);
   prods = parseCSV(document.getElementById('csv-prod').value);
-  const nc = Object.keys(comps).length, np = Object.keys(prods).length, nm = merchants.filter(m=>m.name).length;
-  document.getElementById('status').style.display = 'flex';
-  document.getElementById('status-txt').textContent = `${nc} composant(s) marché · ${nm} marchand(s) · ${np} plat(s) importés`;
+  const nc=Object.keys(comps).length, np=Object.keys(prods).length, nm=merchants.filter(m=>m.name).length;
+  document.getElementById('status').style.display='flex';
+  document.getElementById('status-txt').textContent=`${nc} composant(s) marché · ${nm} marchand(s) · ${np} plat(s) importés`;
   renderPreview(); renderRecipes();
 }
-
 function renderPreview() {
-  const a = allComps(); const el = document.getElementById('preview');
-  if (!Object.keys(a).length && !Object.keys(prods).length) { el.innerHTML=''; return; }
-  const mkt = Object.values(a).filter(c=>c.src==='market').slice(0,7);
-  const mch = Object.values(a).filter(c=>c.src==='merchant').slice(0,8);
-  const pv  = Object.values(prods).slice(0,7);
-  let h = '<div class="prev-grid" style="margin-top:14px;">';
-  h += '<div class="card"><div class="card-hdr"><div class="card-title">Composants détectés</div></div><div class="card-body" style="padding:10px 16px;">';
-  [...mkt,...mch].forEach(c => {
-    const tag = c.src==='merchant' ? `<span class="badge badge-merch" style="font-size:10px;padding:1px 5px;">${I.store} marchand</span>` : '';
-    h += `<div class="prev-item"><span style="display:flex;align-items:center;gap:5px;">${c.name}${tag}</span>${formatGSC(c.copper)}</div>`;
+  const a=allComps(), el=document.getElementById('preview');
+  if (!Object.keys(a).length&&!Object.keys(prods).length){el.innerHTML='';return;}
+  const mkt=Object.values(a).filter(c=>c.src==='market').slice(0,8);
+  const mch=Object.values(a).filter(c=>c.src==='merchant').slice(0,8);
+  const pv=Object.values(prods).slice(0,8);
+  let h='<div class="prev-grid" style="margin-top:14px;">';
+  h+='<div class="card"><div class="card-hdr"><div class="card-title">Composants détectés</div></div><div class="card-body" style="padding:10px 16px;">';
+  [...mkt,...mch].forEach(c=>{
+    const tag=c.src==='merchant'?`<span class="badge badge-merch" style="font-size:10px;padding:1px 5px;">${I.store} marchand</span>`:'';
+    h+=`<div class="prev-item"><span style="display:flex;align-items:center;gap:5px;">${c.name}${tag}</span>${gscHTML(c.copper)}</div>`;
   });
-  h += '</div></div>';
-  h += '<div class="card"><div class="card-hdr"><div class="card-title">Plats détectés</div></div><div class="card-body" style="padding:10px 16px;">';
-  pv.forEach(p => { h += `<div class="prev-item"><span>${p.name}</span>${formatGSC(p.copper)}</div>`; });
-  h += '</div></div></div>';
-  el.innerHTML = h;
+  h+='</div></div>';
+  h+='<div class="card"><div class="card-hdr"><div class="card-title">Plats détectés</div></div><div class="card-body" style="padding:10px 16px;">';
+  pv.forEach(p=>{h+=`<div class="prev-item"><span>${p.name}</span>${gscHTML(p.copper)}</div>`;});
+  h+='</div></div></div>';
+  el.innerHTML=h;
 }
 
 // ── Merchants ──
 function loadMerchants() {
-  try {
-    const s = localStorage.getItem('pf_merch_v2');
-    if (s) { merchants = JSON.parse(s); return; }
-  } catch(e) {}
-  // First load: use defaults
-  merchants = DEFAULT_MERCHANTS.map((m, i) => ({ id: Date.now() + i, name: m.name, price: m.price }));
+  try { const s=localStorage.getItem('pf_merch_v3'); if(s){merchants=JSON.parse(s);return;} } catch(e){}
+  merchants = DEFAULTS.map((d,i)=>({id:Date.now()+i, name:d.name, g:d.g, s:d.s, c:d.c}));
 }
-function saveMerchants() { try { localStorage.setItem('pf_merch_v2', JSON.stringify(merchants)); } catch(e) {} }
-function addMerchant() { merchants.push({id:Date.now(),name:'',price:''}); saveMerchants(); renderMerchants(); }
+function saveMerchants() { try{localStorage.setItem('pf_merch_v3',JSON.stringify(merchants));}catch(e){} }
+function addMerchant() { merchants.push({id:Date.now(),name:'',g:0,s:0,c:0}); saveMerchants(); renderMerchants(); }
 function removeMerchant(id) { merchants=merchants.filter(m=>m.id!==id); saveMerchants(); renderMerchants(); }
-function upMerch(id,f,v) { const m=merchants.find(m=>m.id===id); if(m) m[f]=v; saveMerchants(); }
-
+function upMerchName(id,v){ const m=merchants.find(m=>m.id===id); if(m)m.name=v; saveMerchants(); }
+function upMerchGSC(id){ const m=merchants.find(m=>m.id===id); if(!m) return; m.g=parseInt(document.getElementById('m'+id+'-g').value)||0; m.s=parseInt(document.getElementById('m'+id+'-s').value)||0; m.c=parseInt(document.getElementById('m'+id+'-c').value)||0; saveMerchants(); }
+function resetMerchants() {
+  if (!confirm('Réinitialiser les prix marchands aux valeurs par défaut ? Vos recettes ne seront pas affectées.')) return;
+  merchants = DEFAULTS.map((d,i)=>({id:Date.now()+i, name:d.name, g:d.g, s:d.s, c:d.c}));
+  saveMerchants(); renderMerchants();
+}
 function renderMerchants() {
-  const el = document.getElementById('merch-list'); if(!el) return;
-  let h = '';
-  merchants.forEach(m => {
-    const c = parseGSC(m.price);
-    const preview = m.price && c > 0 ? `<span style="margin-left:4px;">${formatGSC(c)}</span>` : '';
-    h += `<div class="merch-row">
-      <input type="text" placeholder="Nom de l'ingrédient" value="${esc(m.name)}" oninput="upMerch(${m.id},'name',this.value)" style="flex:2;min-width:160px;">
-      <input type="text" class="merch-price" placeholder="0.00.00" value="${esc(m.price)}" oninput="upMerch(${m.id},'price',this.value);renderMerchants();">
-      ${preview}
+  const el=document.getElementById('merch-list'); if(!el) return;
+  let h='';
+  merchants.forEach(m=>{
+    h+=`<div class="merch-row">
+      <input type="text" placeholder="Nom de l'ingrédient" value="${esc(m.name)}" oninput="upMerchName(${m.id},this.value)" style="flex:1;min-width:160px;">
+      <div class="gsc-field">
+        <input type="number" id="m${m.id}-g" min="0" value="${m.g||0}" style="width:42px;" oninput="upMerchGSC(${m.id})">
+        <div class="coin coin-g" title="Or"></div>
+      </div>
+      <div class="gsc-field">
+        <input type="number" id="m${m.id}-s" min="0" max="99" value="${m.s||0}" style="width:42px;" oninput="upMerchGSC(${m.id})">
+        <div class="coin coin-s" title="Argent"></div>
+      </div>
+      <div class="gsc-field">
+        <input type="number" id="m${m.id}-c" min="0" max="99" value="${m.c||0}" style="width:42px;" oninput="upMerchGSC(${m.id})">
+        <div class="coin coin-c" title="Cuivre"></div>
+      </div>
+      <span style="font-size:12px;color:var(--text-3);min-width:80px;">${gscHTML(toCopper(m.g,m.s,m.c))}</span>
       <button class="btn btn-sm btn-ghost btn-del" onclick="removeMerchant(${m.id})">${I.trash}</button>
     </div>`;
   });
-  el.innerHTML = h;
+  el.innerHTML=h;
 }
 
 // ── Recipes ──
 function loadRecipes() {
-  try { const s = localStorage.getItem('pf_rec_v3'); if(s) { recipes=JSON.parse(s); return; } } catch(e) {}
-  recipes = [{ id:Date.now(), name:'', qty:1, ingredients:[{name:'',qty:1}] }];
+  try{const s=localStorage.getItem('pf_rec_v3');if(s){recipes=JSON.parse(s);return;}}catch(e){}
+  recipes=[{id:Date.now(),name:'',qty:1,ingredients:[{name:'',qty:1}]}];
 }
-function saveRecipes() { try { localStorage.setItem('pf_rec_v3', JSON.stringify(recipes)); } catch(e) {} }
-function addRecipe() { recipes.push({id:Date.now(),name:'',qty:1,ingredients:[{name:'',qty:1}]}); saveRecipes(); renderRecipes(); }
-function removeRecipe(id) { recipes=recipes.filter(r=>r.id!==id); saveRecipes(); renderRecipes(); }
-function addIng(id) { const r=recipes.find(r=>r.id===id); if(r) r.ingredients.push({name:'',qty:1}); saveRecipes(); renderRecipes(); }
-function removeIng(id,i) { const r=recipes.find(r=>r.id===id); if(r) r.ingredients.splice(i,1); saveRecipes(); renderRecipes(); }
-function upRec(id,f,v) { const r=recipes.find(r=>r.id===id); if(r) r[f]=f==='qty'?parseFloat(v)||1:v; saveRecipes(); }
-function upIng(id,i,f,v) { const r=recipes.find(r=>r.id===id); if(r&&r.ingredients[i]) r.ingredients[i][f]=f==='qty'?parseFloat(v)||1:v; saveRecipes(); }
+function saveRecipes(){try{localStorage.setItem('pf_rec_v3',JSON.stringify(recipes));}catch(e){}}
+function addRecipe(){recipes.push({id:Date.now(),name:'',qty:1,ingredients:[{name:'',qty:1}]});saveRecipes();renderRecipes();}
+function removeRecipe(id){recipes=recipes.filter(r=>r.id!==id);saveRecipes();renderRecipes();}
+function addIng(id){const r=recipes.find(r=>r.id===id);if(r)r.ingredients.push({name:'',qty:1});saveRecipes();renderRecipes();}
+function removeIng(id,i){const r=recipes.find(r=>r.id===id);if(r)r.ingredients.splice(i,1);saveRecipes();renderRecipes();}
+function upRec(id,f,v){const r=recipes.find(r=>r.id===id);if(r)r[f]=f==='qty'?parseFloat(v)||1:v;saveRecipes();}
+function upIng(id,i,f,v){const r=recipes.find(r=>r.id===id);if(r&&r.ingredients[i])r.ingredients[i][f]=f==='qty'?parseFloat(v)||1:v;saveRecipes();}
 
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;'); }
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;');}
 
-function prodOpts(sel) {
-  let o = '<option value="">— sélectionner un plat —</option>';
-  Object.values(prods).forEach(p => { o+=`<option value="${esc(p.name)}" ${p.name===sel?'selected':''}>${p.name}</option>`; });
-  if (sel && !prods[sel.toLowerCase()]) o+=`<option value="${esc(sel)}" selected>${sel}</option>`;
+function prodOpts(sel){
+  let o='<option value="">— sélectionner un plat —</option>';
+  Object.values(prods).forEach(p=>{o+=`<option value="${esc(p.name)}" ${p.name===sel?'selected':''}>${p.name}</option>`;});
+  if(sel&&!prods[sel.toLowerCase()])o+=`<option value="${esc(sel)}" selected>${sel}</option>`;
   return o;
 }
-function compOpts(sel) {
-  const a = allComps();
-  const mkt = Object.values(a).filter(c=>c.src==='market');
-  const mch = Object.values(a).filter(c=>c.src==='merchant');
-  let o = '<option value="">— sélectionner un ingrédient —</option>';
-  if (mkt.length) { o+='<optgroup label="Marché">'; mkt.forEach(c=>{o+=`<option value="${esc(c.name)}" ${c.name===sel?'selected':''}>${c.name}</option>`;}); o+='</optgroup>'; }
-  if (mch.length) { o+='<optgroup label="Marchand (prix fixe)">'; mch.forEach(c=>{o+=`<option value="${esc(c.name)}" ${c.name===sel?'selected':''}>${c.name}</option>`;}); o+='</optgroup>'; }
-  if (sel && !a[sel.toLowerCase()]) o+=`<option value="${esc(sel)}" selected>${sel}</option>`;
+function compOpts(sel){
+  const a=allComps();
+  const mkt=Object.values(a).filter(c=>c.src==='market');
+  const mch=Object.values(a).filter(c=>c.src==='merchant');
+  let o='<option value="">— sélectionner —</option>';
+  if(mkt.length){o+='<optgroup label="Marché">';mkt.forEach(c=>{o+=`<option value="${esc(c.name)}" ${c.name===sel?'selected':''}>${c.name}</option>`;});o+='</optgroup>';}
+  if(mch.length){o+='<optgroup label="Marchand (prix fixe)">';mch.forEach(c=>{o+=`<option value="${esc(c.name)}" ${c.name===sel?'selected':''}>${c.name}</option>`;});o+='</optgroup>';}
+  if(sel&&!a[sel.toLowerCase()])o+=`<option value="${esc(sel)}" selected>${sel}</option>`;
   return o;
 }
 
-function renderRecipes() {
-  const el = document.getElementById('recipes-list'); if(!el) return;
-  const a = allComps();
-  let h = '';
-  recipes.forEach(r => {
-    h += `<div class="rc">
+function renderRecipes(){
+  const el=document.getElementById('recipes-list');if(!el)return;
+  const a=allComps();
+  let h='';
+  recipes.forEach(r=>{
+    h+=`<div class="rc">
       <div class="rc-hdr">
         <div style="display:flex;align-items:center;gap:8px;flex:1;flex-wrap:wrap;">
           <span style="font-size:12px;color:var(--text-2);font-weight:500;white-space:nowrap;">Plat fabriqué :</span>
@@ -514,116 +686,105 @@ function renderRecipes() {
       </div>
       <div class="rc-body">
         <div class="sec-label" style="margin-bottom:10px;">Ingrédients</div>`;
-    r.ingredients.forEach((ing,idx) => {
-      const isMerch = ing.name && a[ing.name.toLowerCase()] && a[ing.name.toLowerCase()].src==='merchant';
-      h += `<div class="ing-row">
+    r.ingredients.forEach((ing,idx)=>{
+      const isMerch=ing.name&&a[ing.name.toLowerCase()]&&a[ing.name.toLowerCase()].src==='merchant';
+      h+=`<div class="ing-row">
         <select style="flex:2;min-width:160px;" onchange="upIng(${r.id},${idx},'name',this.value)">${compOpts(ing.name)}</select>
-        <input type="text" value="${esc(ing.name)}" placeholder="ou saisir manuellement" style="max-width:160px;" oninput="upIng(${r.id},${idx},'name',this.value)">
+        <input type="text" value="${esc(ing.name)}" placeholder="ou saisir manuellement" style="max-width:150px;" oninput="upIng(${r.id},${idx},'name',this.value)">
         ${isMerch?`<span class="badge badge-merch">${I.store} marchand</span>`:''}
         <span style="color:var(--text-3);">×</span>
         <input type="number" class="qty" value="${ing.qty}" min="0.001" step="0.001" style="width:80px;" onchange="upIng(${r.id},${idx},'qty',this.value)">
-        <button class="btn btn-sm btn-ghost btn-del" onclick="removeIng(${r.id},${idx})" title="Retirer">${I.trash}</button>
+        <button class="btn btn-sm btn-ghost btn-del" onclick="removeIng(${r.id},${idx})">${I.trash}</button>
       </div>`;
     });
-    h += `<button class="btn btn-sm" onclick="addIng(${r.id})" style="margin-top:6px;">${I.plus} Ajouter un ingrédient</button>
-      </div></div>`;
+    h+=`<button class="btn btn-sm" onclick="addIng(${r.id})" style="margin-top:6px;">${I.plus} Ajouter un ingrédient</button></div></div>`;
   });
-  el.innerHTML = h;
+  el.innerHTML=h;
 }
 
 // ── Results ──
-function findEntry(name, dict) {
-  if (!name) return null;
-  const k = name.toLowerCase().trim();
-  if (dict[k]) return dict[k];
-  for (const key of Object.keys(dict)) { if (key.includes(k)||k.includes(key)) return dict[key]; }
+function findEntry(name,dict){
+  if(!name)return null;
+  const k=name.toLowerCase().trim();
+  if(dict[k])return dict[k];
+  for(const key of Object.keys(dict)){if(key.includes(k)||k.includes(key))return dict[key];}
   return null;
 }
-
-function calcResults() {
-  const thrStr = document.getElementById('threshold').value || '0';
-  const thrCopper = parseGSC(thrStr);
-  const FEE = 0.05;
-  const a = allComps();
-  const res = [];
-
-  recipes.forEach(r => {
-    if (!r.name) return;
-    const pe = findEntry(r.name, prods); if (!pe) return;
-    const sellNetCopper = Math.round(pe.copper * (1 - FEE));
-    const qty = r.qty || 1;
-    let costCopper = 0, missing = false;
-    const det = [];
-    r.ingredients.forEach(ing => {
-      if (!ing.name) return;
-      const e = findEntry(ing.name, a);
-      if (!e) { missing=true; det.push({name:ing.name,qty:ing.qty,copper:null,src:null}); return; }
-      costCopper += Math.round(e.copper * ing.qty);
+function calcResults(){
+  const thrCopper=readGSCInput('thr');
+  const a=allComps();
+  const res=[];
+  recipes.forEach(r=>{
+    if(!r.name)return;
+    const pe=findEntry(r.name,prods);if(!pe)return;
+    const sellNet=Math.round(pe.copper*0.95);
+    const qty=r.qty||1;
+    let cost=0,missing=false;
+    const det=[];
+    r.ingredients.forEach(ing=>{
+      if(!ing.name)return;
+      const e=findEntry(ing.name,a);
+      if(!e){missing=true;det.push({name:ing.name,qty:ing.qty,copper:null,src:null});return;}
+      cost+=Math.round(e.copper*ing.qty);
       det.push({name:ing.name,qty:ing.qty,copper:e.copper,src:e.src});
     });
-    const cpuCopper = Math.round(costCopper / qty);
-    const profitCopper = sellNetCopper - cpuCopper;
-    const margin = cpuCopper > 0 ? (profitCopper / cpuCopper) * 100 : 0;
-    res.push({ name:r.name, sellCopper:pe.copper, sellNetCopper, cpuCopper, profitCopper, margin, missing, det, qty });
+    const cpu=Math.round(cost/qty);
+    const profit=sellNet-cpu;
+    const margin=cpu>0?(profit/cpu)*100:0;
+    res.push({name:r.name,sellCopper:pe.copper,sellNet,cpu,profit,margin,missing,det,qty});
   });
-
-  if (sortBy==='profit') res.sort((a,b)=>b.profitCopper-a.profitCopper);
-  else if (sortBy==='margin') res.sort((a,b)=>b.margin-a.margin);
+  if(sortBy==='profit')res.sort((a,b)=>b.profit-a.profit);
+  else if(sortBy==='margin')res.sort((a,b)=>b.margin-a.margin);
   else res.sort((a,b)=>a.name.localeCompare(b.name));
 
-  const profitable = res.filter(r=>r.profitCopper>=thrCopper&&!r.missing);
-  const best = res.filter(r=>!r.missing).sort((a,b)=>b.profitCopper-a.profitCopper)[0];
+  const profitable=res.filter(r=>r.profit>=thrCopper&&!r.missing);
+  const best=res.filter(r=>!r.missing).sort((a,b)=>b.profit-a.profit)[0];
 
-  document.getElementById('metrics').innerHTML = `
+  document.getElementById('metrics').innerHTML=`
     <div class="metric"><div class="m-label">Recettes analysées</div><div class="m-val">${res.length}</div></div>
     <div class="metric"><div class="m-label">Rentables (≥ seuil)</div><div class="m-val ok">${profitable.length}</div></div>
-    <div class="metric"><div class="m-label">Meilleur profit</div><div class="m-val" style="font-size:16px;margin-top:2px;">${best?formatGSC(best.profitCopper):'—'}</div></div>
+    <div class="metric"><div class="m-label">Meilleur profit</div><div class="m-val" style="font-size:15px;margin-top:4px;">${best?gscHTML(best.profit):'—'}</div></div>
     <div class="metric"><div class="m-label">Commission HdV</div><div class="m-val">5%</div></div>
   `;
 
-  if (!res.length) {
-    document.getElementById('results-table').innerHTML = `<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg><p>Aucune recette calculable.<br>Importez vos données et vérifiez vos recettes.</p></div>`;
+  if(!res.length){
+    document.getElementById('results-table').innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg><p>Aucune recette calculable.<br>Importez vos données et vérifiez vos recettes.</p></div>`;
     return;
   }
 
-  let t = `<div class="tbl-wrap"><table><thead><tr>
+  let t=`<div class="tbl-wrap"><table><thead><tr>
     <th>Recette</th><th>Ingrédients</th>
     <th class="tr">Coût craft</th><th class="tr">Vente nette</th>
     <th class="tr">Profit / unité</th><th class="tr">Marge</th><th>Statut</th>
   </tr></thead><tbody>`;
 
-  res.forEach(r => {
-    const badge = r.missing
-      ? `<span class="badge badge-warn">${I.warn} Données manquantes</span>`
-      : r.profitCopper >= thrCopper && r.profitCopper > 0
-        ? `<span class="badge badge-ok">${I.check} Rentable</span>`
-        : `<span class="badge badge-no">${I.x} Non rentable</span>`;
-
-    const ings = r.det.map(d => {
-      const tag = d.src==='merchant'?`<span class="badge badge-merch" style="font-size:10px;padding:1px 4px;">${I.store}</span>`:'';
-      const cost = d.copper!==null
-        ? `<span style="margin-left:4px;">${formatGSC(Math.round(d.copper*d.qty))}</span>`
-        : `<span style="color:var(--warning);">inconnu</span>`;
+  res.forEach(r=>{
+    const badge=r.missing
+      ?`<span class="badge badge-warn">${I.warn} Données manquantes</span>`
+      :r.profit>=thrCopper&&r.profit>0
+        ?`<span class="badge badge-ok">${I.check} Rentable</span>`
+        :`<span class="badge badge-no">${I.x} Non rentable</span>`;
+    const ings=r.det.map(d=>{
+      const tag=d.src==='merchant'?`<span class="badge badge-merch" style="font-size:10px;padding:1px 4px;">${I.store}</span>`:'';
+      const cost=d.copper!==null?`<span style="margin-left:4px;">${gscHTML(Math.round(d.copper*d.qty))}</span>`:`<span style="color:var(--warning);">inconnu</span>`;
       return `<div style="display:flex;align-items:center;gap:4px;padding:1px 0;flex-wrap:wrap;">${tag}<span>${d.name}</span><span style="color:var(--text-3);">×${d.qty}</span>${cost}</div>`;
     }).join('');
-
-    const profitClass = r.profitCopper > 0 ? 'pos' : 'neg';
-
-    t += `<tr>
+    const pc=r.profit>0?'pos':'neg';
+    t+=`<tr>
       <td style="font-weight:500;white-space:nowrap;">${r.name}<br><span style="font-size:11px;color:var(--text-3);font-weight:400;">Produit : ${r.qty} unité(s)</span></td>
       <td style="font-size:12px;">${ings}</td>
-      <td class="tr">${r.missing?'<span style="color:var(--warning);">?</span>':formatGSC(r.cpuCopper)}</td>
-      <td class="tr">${formatGSC(r.sellNetCopper)}</td>
-      <td class="tr ${profitClass}">${formatGSC(r.profitCopper)}</td>
+      <td class="tr">${r.missing?'<span style="color:var(--warning);">?</span>':gscHTML(r.cpu)}</td>
+      <td class="tr">${gscHTML(r.sellNet)}</td>
+      <td class="tr ${pc}">${gscHTML(r.profit)}</td>
       <td class="tr" style="font-family:var(--mono);font-size:12px;">${r.margin.toFixed(1)}%</td>
       <td>${badge}</td>
     </tr>`;
   });
-  t += '</tbody></table></div>';
-  document.getElementById('results-table').innerHTML = t;
+  t+='</tbody></table></div>';
+  document.getElementById('results-table').innerHTML=t;
 }
 
-function setSort(s) {
+function setSort(s){
   sortBy=s;
   document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('sort-'+s).classList.add('active');
@@ -631,8 +792,10 @@ function setSort(s) {
 }
 
 // ── Init ──
+loadTheme();
 loadMerchants(); renderMerchants();
 loadRecipes(); renderRecipes();
+buildThrInput();
 </script>
 </body>
 </html>
