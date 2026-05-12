@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProfitForge.gg — Calculateur de craft WoW</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #ffffff; --bg-2: #f9fafb; --bg-3: #f3f4f6;
+  --border: #e5e7eb; --border-input: #d1d5db;
+  --text: #111827; --text-2: #6b7280; --text-3: #9ca3af;
+  --primary: #18181b; --primary-fg: #ffffff;
+  --success: #16a34a; --success-bg: #f0fdf4; --success-border: #bbf7d0;
+  --danger: #dc2626; --danger-bg: #fef2f2; --danger-border: #fecaca;
+  --warning: #d97706; --warning-bg: #fffbeb; --warning-border: #fde68a;
+  --info: #2563eb; --info-bg: #eff6ff; --info-border: #bfdbfe;
+  --merchant: #7c3aed; --merchant-bg: #f5f3ff; --merchant-border: #ddd6fe;
+  --r: 6px; --r-lg: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --font: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'Geist Mono', monospace;
+}
+body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; min-height: 100vh; }
+
+/* Header */
+header { border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px); }
+.hdr { max-width: 1140px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-icon { width: 30px; height: 30px; background: var(--primary); border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.logo-icon svg { width: 16px; height: 16px; }
+.logo-name { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.02em; }
+.logo-tld { color: var(--text-2); font-weight: 400; }
+.hdr-badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; background: var(--bg-3); color: var(--text-2); border: 1px solid var(--border); font-family: var(--mono); }
+
+/* Hero */
+.hero { background: var(--bg-2); border-bottom: 1px solid var(--border); padding: 28px 24px 24px; }
+.hero-in { max-width: 1140px; margin: 0 auto; }
+.hero h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 5px; }
+.hero p { color: var(--text-2); font-size: 13px; max-width: 500px; }
+.pills { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+.pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg); color: var(--text-2); }
+.pill svg { width: 11px; height: 11px; }
+
+/* Layout */
+.main { max-width: 1140px; margin: 0 auto; padding: 24px 24px 60px; }
+
+/* Card */
+.card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow); overflow: hidden; }
+.card-hdr { padding: 14px 18px; border-bottom: 1px solid var(--border); background: var(--bg-2); }
+.card-title { font-size: 13px; font-weight: 600; }
+.card-desc { font-size: 12px; color: var(--text-2); margin-top: 1px; }
+.card-body { padding: 18px; }
+
+/* Tabs */
+.tabs { display: flex; background: var(--bg-3); border-radius: var(--r); padding: 3px; gap: 2px; width: fit-content; margin-bottom: 22px; }
+.tab { padding: 6px 16px; font-size: 13px; font-weight: 500; border: none; background: transparent; color: var(--text-2); border-radius: 4px; cursor: pointer; transition: all 0.12s; display: flex; align-items: center; gap: 6px; font-family: var(--font); }
+.tab:hover { color: var(--text); }
+.tab.active { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.tab svg { width: 13px; height: 13px; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Forms */
+textarea, input[type=text], input[type=number], select {
+  width: 100%; font-family: var(--font); font-size: 13px; color: var(--text);
+  background: var(--bg); border: 1px solid var(--border-input); border-radius: var(--r);
+  padding: 7px 10px; outline: none; transition: border-color .15s, box-shadow .15s;
+}
+textarea { resize: vertical; min-height: 88px; font-family: var(--mono); font-size: 12px; line-height: 1.65; }
+textarea:focus, input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(24,24,27,.08); }
+select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; font-size: 13px; font-weight: 500; border-radius: var(--r); border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; transition: all .12s; white-space: nowrap; font-family: var(--font); }
+.btn:hover { background: var(--bg-2); }
+.btn svg { width: 13px; height: 13px; }
+.btn-primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+.btn-primary:hover { opacity: .87; background: var(--primary); }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-ghost { border-color: transparent; background: transparent; }
+.btn-ghost:hover { background: var(--bg-3); }
+.btn-del { color: var(--danger); border-color: var(--danger-border); }
+.btn-del:hover { background: var(--danger-bg); }
+
+/* Labels */
+.sec-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); margin-bottom: 7px; }
+hr.sep { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+/* Alert */
+.alert { display: flex; align-items: flex-start; gap: 10px; padding: 11px 14px; border-radius: var(--r); font-size: 13px; margin-bottom: 16px; }
+.alert svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+.alert-info { background: var(--info-bg); border: 1px solid var(--info-border); color: var(--info); }
+
+/* Badge */
+.badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+.badge svg { width: 9px; height: 9px; }
+.badge-ok { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+.badge-no { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+.badge-warn { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
+.badge-merch { background: var(--merchant-bg); color: var(--merchant); border: 1px solid var(--merchant-border); }
+.badge-neutral { background: var(--bg-3); color: var(--text-2); border: 1px solid var(--border); }
+
+/* Metrics */
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 10px; margin-bottom: 18px; }
+.metric { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 14px 16px; }
+.m-label { font-size: 11px; color: var(--text-2); font-weight: 500; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 5px; }
+.m-val { font-size: 22px; font-weight: 600; letter-spacing: -.03em; line-height: 1; }
+.m-val.ok { color: var(--success); }
+
+/* Table */
+.tbl-wrap { border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead { background: var(--bg-2); }
+th { padding: 9px 14px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--text-2); border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--bg-2); }
+.tr { text-align: right; font-family: var(--mono); font-size: 12px; }
+.pos { color: var(--success); font-weight: 600; }
+.neg { color: var(--danger); font-weight: 600; }
+
+/* Recipe card */
+.rc { border: 1px solid var(--border); border-radius: var(--r-lg); margin-bottom: 12px; overflow: hidden; }
+.rc-hdr { background: var(--bg-2); padding: 11px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+.rc-body { padding: 14px 16px; }
+.ing-row { display: flex; gap: 7px; align-items: center; margin-bottom: 7px; flex-wrap: wrap; }
+.qty { width: 78px !important; text-align: right; font-family: var(--mono); }
+
+/* Merchant */
+.merch-row { display: flex; gap: 7px; align-items: center; margin-bottom: 7px; flex-wrap: wrap; }
+.merch-price { width: 150px !important; font-family: var(--mono); }
+
+/* Threshold */
+.thr-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; padding: 13px 16px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); }
+.thr-row label { font-size: 13px; color: var(--text-2); white-space: nowrap; }
+.thr-input { width: 120px !important; font-family: var(--mono); }
+.sort-grp { display: flex; gap: 3px; }
+.sort-btn { font-size: 12px; padding: 5px 11px; }
+.sort-btn.active { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+
+/* Status */
+.status { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-2); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+
+/* Empty */
+.empty { text-align: center; padding: 40px 20px; color: var(--text-3); }
+.empty svg { width: 30px; height: 30px; margin: 0 auto 10px; display: block; opacity: .35; }
+
+/* Preview */
+.prev-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+.prev-item { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 13px; gap: 8px; }
+.prev-item:last-child { border-bottom: none; }
+.prev-price { font-family: var(--mono); font-size: 11px; color: var(--text-2); white-space: nowrap; }
+
+/* Footer */
+footer { border-top: 1px solid var(--border); padding: 18px 24px; text-align: center; font-size: 12px; color: var(--text-3); }
+footer strong { color: var(--text-2); }
+
+@media(max-width:700px){ .prev-grid{grid-template-columns:1fr;} .metrics{grid-template-columns:1fr 1fr;} .hdr-badge{display:none;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <a class="logo" href="#">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="logo-name">ProfitForge<span class="logo-tld">.gg</span></span>
+    </a>
+    <span class="hdr-badge">World of Warcraft · Craft Calculator</span>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-in">
+    <h1>Calculateur de rentabilité craft</h1>
+    <p>Importez vos prix depuis l'hôtel des ventes, définissez vos recettes, et identifiez instantanément les crafts les plus rentables.</p>
+    <div class="pills">
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Commission HdV 5% incluse</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Ingrédients marchands</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>Seuil de rentabilité</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>Recettes sauvegardées</span>
+    </div>
+  </div>
+</div>
+
+<main class="main">
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('data',event)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Données
+    </button>
+    <button class="tab" onclick="showTab('recipes',event)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Recettes
+    </button>
+    <button class="tab" onclick="showTab('results',event)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Résultats
+    </button>
+  </div>
+
+  <!-- DONNÉES -->
+  <div id="panel-data" class="panel active">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">Composants — Marché</div><div class="card-desc">CSV exporté depuis le jeu (volatil)</div></div>
+        <div class="card-body"><textarea id="csv-comp" placeholder='"Prix","Nom","Niveau d&apos;objet","Propriétaire ?","Disponible"&#10;100000,"Presque du porc",23,"",330025'></textarea></div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">Plats finis — Marché</div><div class="card-desc">CSV exporté depuis le jeu (prix de vente)</div></div>
+        <div class="card-body"><textarea id="csv-prod" placeholder='"Prix","Nom","Niveau d&apos;objet","Propriétaire ?","Disponible"&#10;5000000,"Bento de champion",23,"",1200'></textarea></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-hdr">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div><div class="card-title">Ingrédients marchands</div><div class="card-desc">Prix fixes — achetés au PNJ, non affectés par le marché</div></div>
+          <span class="badge badge-merch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Prix fixes</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="merch-list"></div>
+        <button class="btn btn-sm" onclick="addMerchant()" style="margin-top:4px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Ajouter un ingrédient marchand
+        </button>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="parseAll()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-4.17"/></svg>
+        Importer les données
+      </button>
+      <div class="status" id="status" style="display:none;"><div class="dot"></div><span id="status-txt"></span></div>
+    </div>
+    <div id="preview"></div>
+  </div>
+
+  <!-- RECETTES -->
+  <div id="panel-recipes" class="panel">
+    <div class="alert alert-info">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Définissez vos recettes une fois. Sauvegardées automatiquement dans votre navigateur. Les ingrédients marchands s'affichent avec une étiquette violette.</span>
+    </div>
+    <div id="recipes-list"></div>
+    <button class="btn" onclick="addRecipe()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Ajouter une recette
+    </button>
+  </div>
+
+  <!-- RÉSULTATS -->
+  <div id="panel-results" class="panel">
+    <div class="thr-row">
+      <label>Seuil de rentabilité minimum</label>
+      <input type="number" class="thr-input" id="threshold" value="0" min="0" step="0.01">
+      <label style="color:var(--text-3);">po</label>
+      <button class="btn btn-primary" onclick="calcResults()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Calculer
+      </button>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
+        <span style="font-size:12px;color:var(--text-2);">Trier :</span>
+        <div class="sort-grp">
+          <button class="btn sort-btn active" id="sort-profit" onclick="setSort('profit')">Profit</button>
+          <button class="btn sort-btn" id="sort-margin" onclick="setSort('margin')">Marge %</button>
+          <button class="btn sort-btn" id="sort-name" onclick="setSort('name')">Nom</button>
+        </div>
+      </div>
+    </div>
+    <div class="metrics" id="metrics"></div>
+    <div id="results-table"></div>
+  </div>
+</main>
+
+<footer>
+  <strong>ProfitForge.gg</strong> — Outil communautaire non affilié à Blizzard Entertainment.<br>
+  World of Warcraft® est une marque déposée de Blizzard Entertainment, Inc.
+</footer>
+
+<script>
+// ── State ──
+let comps = {}, prods = {}, merchants = [], recipes = [], sortBy = 'profit';
+
+// ── SVG icons ──
+const I = {
+  check: `<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`,
+  x:     `<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  warn:  `<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+  store: `<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+  trash: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`,
+  plus:  `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+};
+
+// ── Tabs ──
+function showTab(name, e) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  if (e && e.currentTarget) e.currentTarget.classList.add('active');
+  if (name === 'results') calcResults();
+}
+
+// ── CSV ──
+function parsePrice(raw) {
+  const n = parseFloat(String(raw).replace(/"/g,'').trim());
+  return isNaN(n) ? 0 : n / 10000;
+}
+function split(line) {
+  const r = []; let c = '', q = false;
+  for (let ch of line) {
+    if (ch === '"') { q = !q; c += ch; }
+    else if (ch === ',' && !q) { r.push(c); c = ''; }
+    else c += ch;
+  }
+  r.push(c); return r;
+}
+function parseCSV(text) {
+  const lines = text.trim().split('\n').filter(l => l.trim());
+  if (lines.length < 2) return {};
+  const out = {};
+  for (let i = 1; i < lines.length; i++) {
+    const p = split(lines[i]);
+    if (p.length < 2) continue;
+    const price = parsePrice(p[0]);
+    const name = p[1].replace(/^"|"$/g,'').trim();
+    if (name) out[name.toLowerCase()] = { name, price, src: 'market' };
+  }
+  return out;
+}
+function allComps() {
+  const a = Object.assign({}, comps);
+  merchants.forEach(m => {
+    if (m.name && m.price !== '') a[m.name.toLowerCase().trim()] = { name: m.name, price: parseFloat(m.price)||0, src: 'merchant' };
+  });
+  return a;
+}
+function parseAll() {
+  comps = parseCSV(document.getElementById('csv-comp').value);
+  prods = parseCSV(document.getElementById('csv-prod').value);
+  const nc = Object.keys(comps).length, np = Object.keys(prods).length, nm = merchants.filter(m=>m.name).length;
+  document.getElementById('status').style.display = 'flex';
+  document.getElementById('status-txt').textContent = `${nc} composant(s) marché · ${nm} marchand(s) · ${np} plat(s) importés`;
+  renderPreview(); renderRecipes();
+}
+function renderPreview() {
+  const a = allComps(); const el = document.getElementById('preview');
+  if (!Object.keys(a).length && !Object.keys(prods).length) { el.innerHTML=''; return; }
+  const mkt = Object.values(a).filter(c=>c.src==='market').slice(0,7);
+  const mch = Object.values(a).filter(c=>c.src==='merchant').slice(0,5);
+  const pv  = Object.values(prods).slice(0,7);
+  let h = '<div class="prev-grid" style="margin-top:14px;">';
+  h += '<div class="card"><div class="card-hdr"><div class="card-title">Composants détectés</div></div><div class="card-body" style="padding:10px 16px;">';
+  [...mkt,...mch].forEach(c => {
+    const tag = c.src==='merchant' ? `<span class="badge badge-merch" style="font-size:10px;padding:1px 5px;">${I.store} marchand</span>` : '';
+    h += `<div class="prev-item"><span style="display:flex;align-items:center;gap:5px;">${c.name}${tag}</span><span class="prev-price">${c.price.toFixed(4)} po</span></div>`;
+  });
+  h += '</div></div>';
+  h += '<div class="card"><div class="card-hdr"><div class="card-title">Plats détectés</div></div><div class="card-body" style="padding:10px 16px;">';
+  pv.forEach(p => { h += `<div class="prev-item"><span>${p.name}</span><span class="prev-price">${p.price.toFixed(2)} po</span></div>`; });
+  h += '</div></div></div>';
+  el.innerHTML = h;
+}
+
+// ── Merchants ──
+function loadMerchants() {
+  try { const s = localStorage.getItem('pf_merch_v1'); if (s) merchants = JSON.parse(s); } catch(e) { merchants=[]; }
+  if (!merchants.length) merchants = [{ id: Date.now(), name: 'Ingrédient de la taverne', price: '0.1' }];
+}
+function saveMerchants() { try { localStorage.setItem('pf_merch_v1', JSON.stringify(merchants)); } catch(e) {} }
+function addMerchant() { merchants.push({id:Date.now(),name:'',price:''}); saveMerchants(); renderMerchants(); }
+function removeMerchant(id) { merchants=merchants.filter(m=>m.id!==id); saveMerchants(); renderMerchants(); }
+function upMerch(id,f,v) { const m=merchants.find(m=>m.id===id); if(m) m[f]=v; saveMerchants(); }
+function renderMerchants() {
+  const el = document.getElementById('merch-list'); if(!el) return;
+  let h = '';
+  merchants.forEach(m => {
+    h += `<div class="merch-row">
+      <input type="text" placeholder="Nom de l'ingrédient" value="${esc(m.name)}" oninput="upMerch(${m.id},'name',this.value)" style="flex:2;min-width:160px;">
+      <input type="number" class="merch-price" placeholder="Prix en po" value="${esc(m.price)}" step="0.0001" min="0" oninput="upMerch(${m.id},'price',this.value)">
+      <span style="font-size:12px;color:var(--text-3);white-space:nowrap;">po / unité</span>
+      <button class="btn btn-sm btn-ghost btn-del" onclick="removeMerchant(${m.id})">${I.trash}</button>
+    </div>`;
+  });
+  el.innerHTML = h;
+}
+
+// ── Recipes ──
+function loadRecipes() {
+  try { const s = localStorage.getItem('pf_rec_v3'); if(s) recipes=JSON.parse(s); } catch(e) { recipes=[]; }
+  if (!recipes.length) recipes = [{ id:Date.now(), name:'', qty:1, ingredients:[{name:'',qty:1}] }];
+}
+function saveRecipes() { try { localStorage.setItem('pf_rec_v3', JSON.stringify(recipes)); } catch(e) {} }
+function addRecipe() { recipes.push({id:Date.now(),name:'',qty:1,ingredients:[{name:'',qty:1}]}); saveRecipes(); renderRecipes(); }
+function removeRecipe(id) { recipes=recipes.filter(r=>r.id!==id); saveRecipes(); renderRecipes(); }
+function addIng(id) { const r=recipes.find(r=>r.id===id); if(r) r.ingredients.push({name:'',qty:1}); saveRecipes(); renderRecipes(); }
+function removeIng(id,i) { const r=recipes.find(r=>r.id===id); if(r) r.ingredients.splice(i,1); saveRecipes(); renderRecipes(); }
+function upRec(id,f,v) { const r=recipes.find(r=>r.id===id); if(r) r[f]=f==='qty'?parseFloat(v)||1:v; saveRecipes(); }
+function upIng(id,i,f,v) { const r=recipes.find(r=>r.id===id); if(r&&r.ingredients[i]) r.ingredients[i][f]=f==='qty'?parseFloat(v)||1:v; saveRecipes(); }
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;'); }
+
+function prodOpts(sel) {
+  let o = '<option value="">— sélectionner un plat —</option>';
+  Object.values(prods).forEach(p => { o+=`<option value="${esc(p.name)}" ${p.name===sel?'selected':''}>${p.name}</option>`; });
+  if (sel && !prods[sel.toLowerCase()]) o+=`<option value="${esc(sel)}" selected>${sel}</option>`;
+  return o;
+}
+function compOpts(sel) {
+  const a = allComps();
+  const mkt = Object.values(a).filter(c=>c.src==='market');
+  const mch = Object.values(a).filter(c=>c.src==='merchant');
+  let o = '<option value="">— sélectionner un ingrédient —</option>';
+  if (mkt.length) { o+='<optgroup label="Marché">'; mkt.forEach(c=>{o+=`<option value="${esc(c.name)}" ${c.name===sel?'selected':''}>${c.name}</option>`;}); o+='</optgroup>'; }
+  if (mch.length) { o+='<optgroup label="Marchand (prix fixe)">'; mch.forEach(c=>{o+=`<option value="${esc(c.name)}" ${c.name===sel?'selected':''}>${c.name}</option>`;}); o+='</optgroup>'; }
+  if (sel && !a[sel.toLowerCase()]) o+=`<option value="${esc(sel)}" selected>${sel}</option>`;
+  return o;
+}
+
+function renderRecipes() {
+  const el = document.getElementById('recipes-list'); if(!el) return;
+  const a = allComps();
+  let h = '';
+  recipes.forEach(r => {
+    h += `<div class="rc">
+      <div class="rc-hdr">
+        <div style="display:flex;align-items:center;gap:8px;flex:1;flex-wrap:wrap;">
+          <span style="font-size:12px;color:var(--text-2);font-weight:500;white-space:nowrap;">Plat fabriqué :</span>
+          <select style="flex:1;min-width:170px;" onchange="upRec(${r.id},'name',this.value)">${prodOpts(r.name)}</select>
+          <input type="text" value="${esc(r.name)}" placeholder="ou saisir manuellement" style="max-width:190px;" oninput="upRec(${r.id},'name',this.value)">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;color:var(--text-2);white-space:nowrap;">Qté produite :</span>
+          <input type="number" class="qty" value="${r.qty||1}" min="1" style="width:70px;" onchange="upRec(${r.id},'qty',this.value)">
+          <button class="btn btn-sm btn-del" onclick="removeRecipe(${r.id})">${I.trash} Supprimer</button>
+        </div>
+      </div>
+      <div class="rc-body">
+        <div class="sec-label" style="margin-bottom:10px;">Ingrédients</div>`;
+    r.ingredients.forEach((ing,idx) => {
+      const isMerch = ing.name && a[ing.name.toLowerCase()] && a[ing.name.toLowerCase()].src==='merchant';
+      h += `<div class="ing-row">
+        <select style="flex:2;min-width:160px;" onchange="upIng(${r.id},${idx},'name',this.value)">${compOpts(ing.name)}</select>
+        <input type="text" value="${esc(ing.name)}" placeholder="ou saisir manuellement" style="max-width:160px;" oninput="upIng(${r.id},${idx},'name',this.value)">
+        ${isMerch?`<span class="badge badge-merch">${I.store} marchand</span>`:''}
+        <span style="color:var(--text-3);">×</span>
+        <input type="number" class="qty" value="${ing.qty}" min="0.001" step="0.001" style="width:80px;" onchange="upIng(${r.id},${idx},'qty',this.value)">
+        <button class="btn btn-sm btn-ghost btn-del" onclick="removeIng(${r.id},${idx})" title="Retirer">${I.trash}</button>
+      </div>`;
+    });
+    h += `<button class="btn btn-sm" onclick="addIng(${r.id})" style="margin-top:6px;">${I.plus} Ajouter un ingrédient</button>
+      </div></div>`;
+  });
+  el.innerHTML = h;
+}
+
+// ── Results ──
+function findEntry(name, dict) {
+  if (!name) return null;
+  const k = name.toLowerCase().trim();
+  if (dict[k]) return dict[k];
+  for (const key of Object.keys(dict)) { if (key.includes(k)||k.includes(key)) return dict[key]; }
+  return null;
+}
+function calcResults() {
+  const thr = parseFloat(document.getElementById('threshold').value)||0;
+  const a = allComps();
+  const res = [];
+  recipes.forEach(r => {
+    if (!r.name) return;
+    const pe = findEntry(r.name, prods); if (!pe) return;
+    const sellNet = pe.price * 0.95;
+    const qty = r.qty||1;
+    let cost = 0, missing = false;
+    const det = [];
+    r.ingredients.forEach(ing => {
+      if (!ing.name) return;
+      const e = findEntry(ing.name, a);
+      if (!e) { missing=true; det.push({name:ing.name,qty:ing.qty,price:null,src:null}); return; }
+      cost += e.price * ing.qty;
+      det.push({name:ing.name,qty:ing.qty,price:e.price,src:e.src});
+    });
+    const cpu = cost/qty, profit = sellNet-cpu;
+    const margin = cpu>0?(profit/cpu)*100:0;
+    res.push({name:r.name,sell:pe.price,sellNet,cpu,profit,margin,missing,det,qty});
+  });
+  if (sortBy==='profit') res.sort((a,b)=>b.profit-a.profit);
+  else if (sortBy==='margin') res.sort((a,b)=>b.margin-a.margin);
+  else res.sort((a,b)=>a.name.localeCompare(b.name));
+
+  const profitable = res.filter(r=>r.profit>=thr&&!r.missing);
+  const best = res.filter(r=>!r.missing).sort((a,b)=>b.profit-a.profit)[0];
+
+  document.getElementById('metrics').innerHTML = `
+    <div class="metric"><div class="m-label">Recettes analysées</div><div class="m-val">${res.length}</div></div>
+    <div class="metric"><div class="m-label">Rentables (≥ seuil)</div><div class="m-val ok">${profitable.length}</div></div>
+    <div class="metric"><div class="m-label">Meilleur profit</div><div class="m-val">${best?best.profit.toFixed(2)+' po':'—'}</div></div>
+    <div class="metric"><div class="m-label">Commission HdV</div><div class="m-val">5%</div></div>
+  `;
+
+  if (!res.length) {
+    document.getElementById('results-table').innerHTML = `<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg><p>Aucune recette calculable.<br>Importez vos données et vérifiez vos recettes.</p></div>`;
+    return;
+  }
+
+  let t = `<div class="tbl-wrap"><table><thead><tr>
+    <th>Recette</th><th>Ingrédients</th>
+    <th class="tr">Coût craft</th><th class="tr">Vente nette</th>
+    <th class="tr">Profit / unité</th><th class="tr">Marge</th><th>Statut</th>
+  </tr></thead><tbody>`;
+
+  res.forEach(r => {
+    const badge = r.missing
+      ? `<span class="badge badge-warn">${I.warn} Données manquantes</span>`
+      : r.profit>=thr&&r.profit>0
+        ? `<span class="badge badge-ok">${I.check} Rentable</span>`
+        : `<span class="badge badge-no">${I.x} Non rentable</span>`;
+
+    const ings = r.det.map(d => {
+      const tag = d.src==='merchant'?`<span class="badge badge-merch" style="font-size:10px;padding:1px 4px;">${I.store}</span>`:'';
+      const cost = d.price!==null?`<span style="color:var(--text-3);font-family:var(--mono);font-size:11px;">${(d.price*d.qty).toFixed(4)} po</span>`:`<span style="color:var(--warning);">inconnu</span>`;
+      return `<div style="display:flex;align-items:center;gap:4px;padding:1px 0;">${tag}<span>${d.name}</span><span style="color:var(--text-3);">×${d.qty}</span>${cost}</div>`;
+    }).join('');
+
+    t += `<tr>
+      <td style="font-weight:500;white-space:nowrap;">${r.name}<br><span style="font-size:11px;color:var(--text-3);font-weight:400;">Produit : ${r.qty} unité(s)</span></td>
+      <td style="font-size:12px;">${ings}</td>
+      <td class="tr">${r.missing?'<span style="color:var(--warning);">?</span>':r.cpu.toFixed(4)+' po'}</td>
+      <td class="tr">${r.sellNet.toFixed(2)} po</td>
+      <td class="tr ${r.profit>0?'pos':'neg'}">${r.profit.toFixed(2)} po</td>
+      <td class="tr">${r.margin.toFixed(1)}%</td>
+      <td>${badge}</td>
+    </tr>`;
+  });
+  t += '</tbody></table></div>';
+  document.getElementById('results-table').innerHTML = t;
+}
+function setSort(s) {
+  sortBy=s;
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sort-'+s).classList.add('active');
+  calcResults();
+}
+
+loadMerchants(); renderMerchants();
+loadRecipes(); renderRecipes();
+</script>
+</body>
+</html>
