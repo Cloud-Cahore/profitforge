@@ -18,6 +18,8 @@
   --warning: #d97706; --warning-bg: #fffbeb; --warning-border: #fde68a;
   --info: #2563eb; --info-bg: #eff6ff; --info-border: #bfdbfe;
   --merch: #7c3aed; --merch-bg: #f5f3ff; --merch-border: #ddd6fe;
+  --q1: #0369a1; --q1-bg: #e0f2fe; --q1-border: #7dd3fc;
+  --q2: #7c3aed; --q2-bg: #f5f3ff; --q2-border: #c4b5fd;
   --muted: #f9fafb; --muted-fg: #6b7280;
   --step-active: #18181b; --step-done: #16a34a; --step-idle: #d1d5db;
   --wip-bg: #fefce8; --wip-border: #fde047; --wip-text: #854d0e;
@@ -26,21 +28,24 @@
   --shadow: 0 1px 3px rgba(0,0,0,0.08); --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
   --font: 'Geist', -apple-system, sans-serif; --mono: 'Geist Mono', monospace;
 }
+/* ── DARK MODE — gamme Raidbot ── */
 [data-theme="dark"] {
-  --bg: #141414; --bg-2: #1c1c1c; --bg-3: #252525; --bg-4: #2f2f2f;
-  --border: #333; --border-input: #444;
-  --text: #f0f0f0; --text-2: #a0a0a0; --text-3: #606060;
-  --primary: #e8e8e8; --primary-fg: #111;
-  --success: #4ade80; --success-bg: #052e16; --success-border: #166534;
-  --danger: #f87171; --danger-bg: #2d0a0a; --danger-border: #7f1d1d;
-  --warning: #fbbf24; --warning-bg: #2d1a00; --warning-border: #78350f;
+  --bg: #1a1b1e; --bg-2: #25262b; --bg-3: #2c2d33; --bg-4: #373a40;
+  --border: #373a40; --border-input: #4a4d57;
+  --text: #c1c2c5; --text-2: #909296; --text-3: #5c5f66;
+  --primary: #c1c2c5; --primary-fg: #1a1b1e;
+  --success: #4ade80; --success-bg: #0a1f0f; --success-border: #166534;
+  --danger: #f87171; --danger-bg: #1f0a0a; --danger-border: #7f1d1d;
+  --warning: #fbbf24; --warning-bg: #1f1400; --warning-border: #92400e;
   --info: #60a5fa; --info-bg: #0a1628; --info-border: #1e3a5f;
   --merch: #a78bfa; --merch-bg: #1a0f2e; --merch-border: #4c1d95;
-  --muted: #1c1c1c; --muted-fg: #a0a0a0;
-  --step-active: #e8e8e8; --step-done: #4ade80; --step-idle: #333;
+  --q1: #38bdf8; --q1-bg: #0a1f2e; --q1-border: #0369a1;
+  --q2: #a78bfa; --q2-bg: #1a0f2e; --q2-border: #6d28d9;
+  --muted: #25262b; --muted-fg: #909296;
+  --step-active: #c1c2c5; --step-done: #4ade80; --step-idle: #373a40;
   --wip-bg: #1c1800; --wip-border: #78350f; --wip-text: #fbbf24;
-  --gold-c: #f0c040; --silver-c: #b0b0b0; --copper-c: #e07040;
-  --shadow: 0 1px 3px rgba(0,0,0,0.4); --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+  --gold-c: #f0c040; --silver-c: #c0c0c0; --copper-c: #e07040;
+  --shadow: 0 1px 3px rgba(0,0,0,0.5); --shadow-md: 0 4px 12px rgba(0,0,0,0.6);
 }
 body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; min-height: 100vh; transition: background .2s, color .2s; }
 
@@ -77,21 +82,14 @@ header { border-bottom: 1px solid var(--border); background: var(--bg); position
 /* ── Main ── */
 .main { max-width: 1000px; margin: 0 auto; padding: 32px 24px 60px; }
 
-/* ══════════════════════════════════════
-   STEPPER
-══════════════════════════════════════ */
+/* ══ STEPPER ══ */
 .stepper { display: flex; flex-direction: column; gap: 0; }
-
 .step { display: flex; gap: 0; position: relative; }
-
-/* vertical line between steps */
 .step:not(:last-child) .step-line-wrap::after {
   content: ''; position: absolute; left: 15px; top: 32px; bottom: 0;
   width: 2px; background: var(--border); z-index: 0;
 }
 .step-line-wrap { position: relative; flex-shrink: 0; width: 32px; display: flex; flex-direction: column; align-items: center; }
-
-/* circle */
 .step-circle {
   width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--step-idle);
   background: var(--bg); display: flex; align-items: center; justify-content: center;
@@ -103,8 +101,6 @@ header { border-bottom: 1px solid var(--border); background: var(--bg); position
 .step.done .step-circle .step-num { display: none; }
 .step.done .step-circle .step-check { display: block; }
 .step-check { display: none; }
-
-/* content */
 .step-content { flex: 1; padding: 0 0 36px 20px; min-width: 0; }
 .step-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 2px; cursor: pointer; padding: 4px 0; }
 .step-title { font-size: 15px; font-weight: 600; letter-spacing: -.01em; line-height: 1.25; }
@@ -112,11 +108,9 @@ header { border-bottom: 1px solid var(--border); background: var(--bg); position
 .step-body { margin-top: 18px; display: none; }
 .step.active .step-body { display: block; }
 .step-actions { display: flex; gap: 8px; margin-top: 20px; align-items: center; }
-
-/* last step no bottom padding */
 .step:last-child .step-content { padding-bottom: 0; }
 
-/* ── Cards inside steps ── */
+/* ── Cards ── */
 .card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow); }
 .card-hdr { padding: 11px 16px; border-bottom: 1px solid var(--border); background: var(--bg-2); }
 .card-title { font-size: 13px; font-weight: 600; }
@@ -174,6 +168,8 @@ label.lbl { display: block; font-size: 12px; font-weight: 500; margin-bottom: 5p
 .badge-warn { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
 .badge-merch { background: var(--merch-bg); color: var(--merch); border: 1px solid var(--merch-border); }
 .badge-info { background: var(--info-bg); color: var(--info); border: 1px solid var(--info-border); }
+.badge-q1 { background: var(--q1-bg); color: var(--q1); border: 1px solid var(--q1-border); }
+.badge-q2 { background: var(--q2-bg); color: var(--q2); border: 1px solid var(--q2-border); }
 
 /* ── Alert ── */
 .alert { display: flex; align-items: flex-start; gap: 9px; padding: 10px 13px; border-radius: var(--r); font-size: 13px; margin-bottom: 14px; }
@@ -192,15 +188,45 @@ label.lbl { display: block; font-size: 12px; font-weight: 500; margin-bottom: 5p
 .sec-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); margin-bottom: 6px; }
 hr.sep { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
 
-/* ── Merchant rows ── */
-.merch-row { display: flex; gap: 7px; align-items: center; margin-bottom: 7px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r); padding: 7px 10px; flex-wrap: wrap; }
+/* ── Collapsible marchands ── */
+.merch-toggle { display: flex; align-items: center; gap: 8px; padding: 9px 13px; background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); cursor: pointer; font-size: 13px; color: var(--text-2); width: 100%; transition: background .12s; user-select: none; }
+.merch-toggle:hover { background: var(--bg-3); }
+.merch-toggle svg { width: 13px; height: 13px; transition: transform .2s; }
+.merch-toggle.open svg.chevron { transform: rotate(180deg); }
+.merch-panel { display: none; border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--r-lg) var(--r-lg); overflow: hidden; }
+.merch-panel.open { display: block; }
+.merch-row { display: flex; gap: 7px; align-items: center; padding: 7px 10px; border-bottom: 1px solid var(--border); flex-wrap: wrap; background: var(--bg); }
+.merch-row:last-child { border-bottom: none; }
 
-/* ── Recipe card ── */
+/* ── Recipe cards — cartes cliquables ── */
+.recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-bottom: 16px; }
+.rc-card { border: 2px solid var(--border); border-radius: var(--r-lg); padding: 10px 12px; cursor: pointer; transition: all .15s; background: var(--bg); user-select: none; position: relative; }
+.rc-card:hover { border-color: var(--step-active); background: var(--bg-2); }
+.rc-card.selected { border-color: var(--success); background: var(--success-bg); }
+.rc-card.selected .rc-card-name { color: var(--success); }
+.rc-card-check { position: absolute; top: 8px; right: 8px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; transition: all .15s; }
+.rc-card.selected .rc-card-check { background: var(--success); border-color: var(--success); color: #fff; }
+.rc-card-name { font-size: 13px; font-weight: 500; margin-bottom: 4px; padding-right: 22px; line-height: 1.3; }
+.rc-card-meta { font-size: 11px; color: var(--text-3); display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+
+/* ── Barre de recherche ── */
+.search-bar { position: relative; margin-bottom: 12px; }
+.search-bar input { padding-left: 32px; }
+.search-bar svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text-3); pointer-events: none; }
+
+/* ── Recipe card détail (éditable) ── */
 .rc { border: 1px solid var(--border); border-radius: var(--r-lg); margin-bottom: 10px; overflow: hidden; box-shadow: var(--shadow); }
 .rc-hdr { background: var(--bg-3); padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
 .rc-body { padding: 12px 14px; background: var(--bg); }
 .ing-row { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; flex-wrap: wrap; }
 .qty { width: 72px !important; text-align: right; font-family: var(--mono); }
+
+/* ── Qualité selector ── */
+.qual-sel { display: flex; gap: 3px; }
+.qual-btn { padding: 3px 9px; font-size: 11px; font-weight: 600; border-radius: 20px; border: 1.5px solid var(--border); background: var(--bg); color: var(--text-3); cursor: pointer; transition: all .12s; font-family: var(--font); }
+.qual-btn.q1.active { background: var(--q1-bg); color: var(--q1); border-color: var(--q1-border); }
+.qual-btn.q2.active { background: var(--q2-bg); color: var(--q2); border-color: var(--q2-border); }
+.qual-btn:not(.active):hover { background: var(--bg-3); }
 
 /* ── Craft stats panel ── */
 .stats-panel { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 16px; margin-bottom: 16px; }
@@ -211,7 +237,7 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
 .pct-input input { width: 80px !important; font-family: var(--mono); text-align: right; }
 .pct-badge { font-size: 11px; color: var(--text-3); }
 
-/* ── Threshold row ── */
+/* ── Threshold ── */
 .thr-wrap { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .thr-wrap label { font-size: 13px; color: var(--text-2); white-space: nowrap; }
 
@@ -251,11 +277,15 @@ tbody tr:hover td { background: var(--bg-2); }
 .prev-item { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 13px; gap: 8px; }
 .prev-item:last-child { border-bottom: none; }
 
+/* ── Select all / none ── */
+.sel-controls { display: flex; gap: 6px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+.sel-count { font-size: 12px; color: var(--text-2); margin-left: auto; }
+
 /* ── Footer ── */
 footer { border-top: 1px solid var(--border); padding: 16px 24px; text-align: center; font-size: 12px; color: var(--text-3); margin-top: 24px; }
 footer strong { color: var(--text-2); }
 
-@media(max-width:600px) { .two-col{grid-template-columns:1fr;} .stats-grid{grid-template-columns:1fr;} .hdr-badge{display:none;} }
+@media(max-width:600px) { .two-col{grid-template-columns:1fr;} .stats-grid{grid-template-columns:1fr;} .hdr-badge{display:none;} .recipe-grid{grid-template-columns:1fr 1fr;} }
 </style>
 </head>
 <body>
@@ -294,17 +324,17 @@ footer strong { color: var(--text-2); }
 <div class="hero">
   <div class="hero-in">
     <h1>Calculateur de rentabilité craft</h1>
-    <p>Importez vos prix, configurez vos recettes et stats de métier, et identifiez instantanément les crafts les plus rentables.</p>
+    <p>Importez vos prix, sélectionnez vos recettes et identifiez instantanément les crafts les plus rentables.</p>
     <div class="pills">
       <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Commission HdV 5%</span>
       <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Prix marchands</span>
       <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>Multicraft & Resourcefulness</span>
-      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/></svg>Recettes sauvegardées</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v14a2 2 0 0 1-2 2z"/></svg>Recettes pré-enregistrées</span>
     </div>
   </div>
 </div>
 
-<!-- Main Stepper -->
+<!-- Main -->
 <main class="main">
 <div class="stepper" id="stepper">
 
@@ -324,14 +354,14 @@ footer strong { color: var(--text-2); }
         </div>
         <div class="info-wrap">
           <div class="info-btn">i</div>
-          <div class="tooltip">Exportez vos listes depuis l'addon Auctionator en jeu. Collez le CSV des composants (matières premières) dans la première zone, et celui des plats ou objets finis dans la seconde. Les prix sont automatiquement convertis en or/argent/cuivre.</div>
+          <div class="tooltip">Exportez vos listes depuis l'addon Auctionator en jeu. Les noms avec "Niveau 1" ou "Niveau 2" sont automatiquement détectés pour le système de qualités. Les prix sont convertis en or/argent/cuivre.</div>
         </div>
       </div>
       <div class="step-body">
         <div class="two-col" style="margin-bottom:14px;">
           <div class="card">
             <div class="card-hdr"><div class="card-title">Composants</div><div class="card-desc">Matières premières — prix volatils</div></div>
-            <div class="card-body"><textarea id="csv-comp" placeholder='"Prix","Nom","Niveau d&apos;objet","Propriétaire ?","Disponible"&#10;100000,"Presque du porc",23,"",330025'></textarea></div>
+            <div class="card-body"><textarea id="csv-comp" placeholder='"Prix","Nom","Niveau d&apos;objet","Propriétaire ?","Disponible"&#10;100000,"Presque du porc",23,"",330025&#10;25600,"Tranquillette Niveau 1",23,"",661637'></textarea></div>
           </div>
           <div class="card">
             <div class="card-hdr"><div class="card-title">Plats / Objets finis</div><div class="card-desc">Prix de vente à l'HdV</div></div>
@@ -346,6 +376,39 @@ footer strong { color: var(--text-2); }
           <div class="status" id="status" style="display:none;"><div class="dot"></div><span id="status-txt"></span></div>
         </div>
         <div id="preview"></div>
+
+        <!-- Marchands intégrés (collapsible discret) -->
+        <div style="margin-top:14px;">
+          <button class="merch-toggle" id="merch-toggle-btn" onclick="toggleMerchPanel()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            <span>Ingrédients marchands (prix fixes PNJ)</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--text-3);" id="merch-count-badge"></span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="merch-panel" id="merch-panel">
+            <div style="padding:10px 12px;background:var(--bg-2);border-bottom:1px solid var(--border);">
+              <div style="display:grid;grid-template-columns:1fr 100px 100px 100px 32px;gap:6px;align-items:center;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);">
+                <span>Ingrédient</span>
+                <span style="text-align:center;">Or</span>
+                <span style="text-align:center;">Argent</span>
+                <span style="text-align:center;">Cuivre</span>
+                <span></span>
+              </div>
+            </div>
+            <div id="merch-list"></div>
+            <div style="padding:10px 12px;background:var(--bg-2);border-top:1px solid var(--border);display:flex;gap:8px;align-items:center;">
+              <button class="btn btn-sm" onclick="addMerchant()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Ajouter
+              </button>
+              <button class="btn btn-sm btn-warn" onclick="resetMerchants()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5"/></svg>
+                Réinitialiser
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="step-actions">
           <button class="btn btn-primary" onclick="nextStep(1)">Étape suivante <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
         </div>
@@ -353,7 +416,7 @@ footer strong { color: var(--text-2); }
     </div>
   </div>
 
-  <!-- ══ STEP 2 : Ingrédients marchands ══ -->
+  <!-- ══ STEP 2 : Recettes ══ -->
   <div class="step" id="step-2">
     <div class="step-line-wrap">
       <div class="step-circle" onclick="goStep(2)">
@@ -364,33 +427,54 @@ footer strong { color: var(--text-2); }
     <div class="step-content">
       <div class="step-header" onclick="goStep(2)">
         <div>
-          <div class="step-title">Ingrédients marchands</div>
-          <div class="step-desc">Prix fixes achetés auprès des PNJ — non affectés par le marché</div>
+          <div class="step-title">Recettes</div>
+          <div class="step-desc">Sélectionnez les recettes à analyser</div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <button class="btn btn-sm btn-warn" onclick="event.stopPropagation();resetMerchants()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5"/></svg>
-            Réinitialiser
-          </button>
-          <div class="info-wrap">
-            <div class="info-btn">i</div>
-            <div class="tooltip">Ces ingrédients ont un prix fixe chez un PNJ. Saisissez leur prix en Or / Argent / Cuivre. Ils sont sauvegardés et disponibles dans toutes vos recettes. "Réinitialiser" restaure les prix par défaut sans effacer vos recettes.</div>
-          </div>
+        <div class="info-wrap">
+          <div class="info-btn">i</div>
+          <div class="tooltip">Cliquez sur une carte pour activer/désactiver la recette. Seules les recettes sélectionnées apparaîtront dans les résultats. Vous pouvez aussi ajouter des recettes personnalisées.</div>
         </div>
       </div>
       <div class="step-body">
-        <div style="display:grid;grid-template-columns:1fr 120px 120px 120px 32px;gap:6px;align-items:center;padding:0 10px 6px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-3);">
-          <span>Ingrédient</span>
-          <span style="display:flex;align-items:center;gap:4px;justify-content:center;"><div class="coin coin-g" style="width:13px;height:13px;"></div> Or</span>
-          <span style="display:flex;align-items:center;gap:4px;justify-content:center;"><div class="coin coin-s" style="width:13px;height:13px;"></div> Argent</span>
-          <span style="display:flex;align-items:center;gap:4px;justify-content:center;"><div class="coin coin-c" style="width:13px;height:13px;"></div> Cuivre</span>
-          <span></span>
+
+        <!-- Onglets métiers -->
+        <div style="display:flex;gap:4px;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:0;">
+          <button class="btn btn-sm" id="tab-cuisine" onclick="setMetier('cuisine')" style="border-bottom:2px solid var(--primary);border-radius:var(--r) var(--r) 0 0;margin-bottom:-1px;">🍳 Cuisine</button>
         </div>
-        <div id="merch-list"></div>
-        <button class="btn btn-sm" onclick="addMerchant()" style="margin-top:6px;">
+
+        <!-- Barre de recherche -->
+        <div class="search-bar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="recipe-search" placeholder="Rechercher une recette…" oninput="filterRecipes()">
+        </div>
+
+        <!-- Contrôles sélection -->
+        <div class="sel-controls">
+          <button class="btn btn-sm btn-outline" onclick="selectAllRecipes()">Tout sélectionner</button>
+          <button class="btn btn-sm btn-outline" onclick="deselectAllRecipes()">Tout désélectionner</button>
+          <span class="sel-count" id="sel-count"></span>
+        </div>
+
+        <!-- Grille de cartes -->
+        <div class="recipe-grid" id="recipe-grid"></div>
+
+        <!-- Section recettes personnalisées (repliée) -->
+        <button class="merch-toggle" id="custom-toggle-btn" onclick="toggleCustomPanel()" style="margin-top:8px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Ajouter
+          <span>Ajouter des recettes personnalisées</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--text-3);">Optionnel</span>
+          <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
+        <div class="merch-panel" id="custom-panel">
+          <div style="padding:12px;">
+            <div id="recipes-list"></div>
+            <button class="btn btn-sm" onclick="addRecipe()" style="margin-top:6px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Ajouter une recette
+            </button>
+          </div>
+        </div>
+
         <div class="step-actions">
           <button class="btn btn-outline" onclick="prevStep(2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Retour</button>
           <button class="btn btn-primary" onclick="nextStep(2)">Étape suivante <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
@@ -399,7 +483,7 @@ footer strong { color: var(--text-2); }
     </div>
   </div>
 
-  <!-- ══ STEP 3 : Recettes ══ -->
+  <!-- ══ STEP 3 : Stats de métier ══ -->
   <div class="step" id="step-3">
     <div class="step-line-wrap">
       <div class="step-circle" onclick="goStep(3)">
@@ -410,33 +494,52 @@ footer strong { color: var(--text-2); }
     <div class="step-content">
       <div class="step-header" onclick="goStep(3)">
         <div>
-          <div class="step-title">Recettes</div>
-          <div class="step-desc">Définissez vos recettes une fois — sauvegardées automatiquement</div>
+          <div class="step-title">Stats de métier</div>
+          <div class="step-desc">Multicraft et Resourcefulness — impact sur la rentabilité moyenne</div>
         </div>
         <div class="info-wrap">
           <div class="info-btn">i</div>
-          <div class="tooltip">Choisissez le plat fabriqué, indiquez la quantité produite par craft, puis ajoutez chaque ingrédient avec sa quantité. Les ingrédients marchands (prix fixes) sont identifiés automatiquement en violet.</div>
+          <div class="tooltip">Entrez vos % tels qu'affichés dans votre fenêtre de métier en jeu. Ces stats ajustent le profit attendu sur le long terme.</div>
         </div>
       </div>
       <div class="step-body">
-        <div class="alert alert-info">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <span>Importez d'abord vos données (étape 1) pour remplir les listes déroulantes.</span>
+        <div class="stats-panel">
+          <div class="sec-label">Stats affichées dans votre fenêtre de métier</div>
+          <div class="stats-grid">
+            <div class="stat-field">
+              <label>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l5.1 5.1"/><path d="M4 4l5 5"/></svg>
+                Multicraft
+                <div class="info-wrap"><div class="info-btn">i</div><div class="tooltip">% de chance de produire des exemplaires supplémentaires. Quand ça proc, vous obtenez en moyenne 1,5× la quantité bonus. Ex : 20% → +30% de valeur produite en moyenne.</div></div>
+              </label>
+              <div class="pct-input">
+                <input type="number" id="stat-multicraft" min="0" max="100" step="0.1" value="0" placeholder="0">
+                <span class="pct-badge">%</span>
+              </div>
+            </div>
+            <div class="stat-field">
+              <label>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                Resourcefulness
+                <div class="info-wrap"><div class="info-btn">i</div><div class="tooltip">% de chance d'utiliser moins de composants échangeables lors du craft. Réduit le coût moyen des matières premières de marché.</div></div>
+              </label>
+              <div class="pct-input">
+                <input type="number" id="stat-resourcefulness" min="0" max="100" step="0.1" value="0" placeholder="0">
+                <span class="pct-badge">%</span>
+              </div>
+            </div>
+          </div>
+          <div id="stats-summary" style="margin-top:12px;font-size:12px;color:var(--text-2);padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);"></div>
         </div>
-        <div id="recipes-list"></div>
-        <button class="btn btn-sm" onclick="addRecipe()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Ajouter une recette
-        </button>
         <div class="step-actions">
           <button class="btn btn-outline" onclick="prevStep(3)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Retour</button>
-          <button class="btn btn-primary" onclick="nextStep(3)">Étape suivante <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+          <button class="btn btn-primary" onclick="nextStep(3)">Voir les résultats <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══ STEP 4 : Stats de métier ══ -->
+  <!-- ══ STEP 4 : Résultats ══ -->
   <div class="step" id="step-4">
     <div class="step-line-wrap">
       <div class="step-circle" onclick="goStep(4)">
@@ -447,73 +550,12 @@ footer strong { color: var(--text-2); }
     <div class="step-content">
       <div class="step-header" onclick="goStep(4)">
         <div>
-          <div class="step-title">Stats de métier</div>
-          <div class="step-desc">Multicraft et Resourcefulness — impact sur la rentabilité moyenne</div>
-        </div>
-        <div class="info-wrap">
-          <div class="info-btn">i</div>
-          <div class="tooltip">Entrez vos % tels qu'affichés dans votre fenêtre de métier en jeu. Multicraft augmente la quantité produite en moyenne. Resourcefulness réduit la consommation de composants en moyenne. Ces stats ajustent le profit attendu sur le long terme.</div>
-        </div>
-      </div>
-      <div class="step-body">
-        <div class="stats-panel">
-          <div class="sec-label">Stats affichées dans votre fenêtre de métier</div>
-          <div class="stats-grid">
-
-            <div class="stat-field">
-              <label>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l5.1 5.1"/><path d="M4 4l5 5"/></svg>
-                Multicraft
-                <div class="info-wrap"><div class="info-btn">i</div><div class="tooltip">% de chance de produire des exemplaires supplémentaires. Quand ça proc, vous obtenez en moyenne 1,5× la quantité de base en items bonus. Exemple : 20% Multicraft → +30% de valeur produite en moyenne par craft.</div></div>
-              </label>
-              <div class="pct-input">
-                <input type="number" id="stat-multicraft" min="0" max="100" step="0.1" value="0" placeholder="0">
-                <span class="pct-badge">%</span>
-              </div>
-              <div id="multicraft-preview" style="font-size:12px;color:var(--text-2);margin-top:3px;"></div>
-            </div>
-
-            <div class="stat-field">
-              <label>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                Resourcefulness
-                <div class="info-wrap"><div class="info-btn">i</div><div class="tooltip">% de chance d'utiliser moins de composants échangeables lors du craft. Quand ça proc, jusqu'à 30% d'un composant aléatoire est remboursé. Réduit le coût moyen des matières premières.</div></div>
-              </label>
-              <div class="pct-input">
-                <input type="number" id="stat-resourcefulness" min="0" max="100" step="0.1" value="0" placeholder="0">
-                <span class="pct-badge">%</span>
-              </div>
-              <div id="resourcefulness-preview" style="font-size:12px;color:var(--text-2);margin-top:3px;"></div>
-            </div>
-
-          </div>
-          <div id="stats-summary" style="margin-top:12px;font-size:12px;color:var(--text-2);padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);"></div>
-        </div>
-        <div class="step-actions">
-          <button class="btn btn-outline" onclick="prevStep(4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Retour</button>
-          <button class="btn btn-primary" onclick="nextStep(4)">Voir les résultats <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ STEP 5 : Résultats ══ -->
-  <div class="step" id="step-5">
-    <div class="step-line-wrap">
-      <div class="step-circle" onclick="goStep(5)">
-        <span class="step-num">5</span>
-        <span class="step-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
-      </div>
-    </div>
-    <div class="step-content">
-      <div class="step-header" onclick="goStep(5)">
-        <div>
           <div class="step-title">Résultats</div>
           <div class="step-desc">Analyse de rentabilité avec stats de métier appliquées</div>
         </div>
         <div class="info-wrap">
           <div class="info-btn">i</div>
-          <div class="tooltip">Le profit affiché est le profit moyen attendu par craft, en tenant compte de votre Multicraft et Resourcefulness. La commission HdV de 5% est déduite du prix de vente. Les recettes avec données manquantes s'affichent en orange.</div>
+          <div class="tooltip">Le profit affiché est le profit moyen attendu par craft. La commission HdV de 5% est déduite du prix de vente. Les recettes avec données manquantes s'affichent en orange.</div>
         </div>
       </div>
       <div class="step-body">
@@ -536,7 +578,7 @@ footer strong { color: var(--text-2); }
         <div class="metrics" id="metrics"></div>
         <div id="results-table"></div>
         <div class="step-actions">
-          <button class="btn btn-outline" onclick="prevStep(5)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Retour</button>
+          <button class="btn btn-outline" onclick="prevStep(4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg> Retour</button>
         </div>
       </div>
     </div>
@@ -551,22 +593,109 @@ footer strong { color: var(--text-2); }
 </footer>
 
 <script>
-// ══ STATE ══
-let comps={}, prods={}, merchants=[], recipes=[], sortBy='profit';
-const TOTAL_STEPS = 5;
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let comps = {}, prods = {}, merchants = [], recipes = [], sortBy = 'profit';
+let currentMetier = 'cuisine';
+// selectedPresets : Set de IDs de recettes pré-enregistrées sélectionnées
+let selectedPresets = new Set();
+const TOTAL_STEPS = 4;
 
-// ══ DEFAULTS ══
+// ══════════════════════════════════════════════
+// RECETTES PRÉ-ENREGISTRÉES — CUISINE
+// ══════════════════════════════════════════════
+// Modèle de données avec support qualité (niveau null = pas de qualité, ex: cuisine)
+// { id, name, qty, metier, ingredients: [{item, niveau, qty}], prodNiveau }
+const PRESET_RECIPES = [
+  { id:'p1',  name:'Filet touché par la gangrène',       qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Filet thalassien',niveau:null,qty:5},{item:'Essence de wyrm de mana',niveau:null,qty:1},{item:'Vin de cuisine',niveau:null,qty:1}]},
+  { id:'p2',  name:'Luminageoire brûlé par le soleil',   qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Luminageoire tendre',niveau:null,qty:2},{item:'Filet thalassien',niveau:null,qty:5},{item:'Ingrédients de la taverne',niveau:null,qty:1}]},
+  { id:'p3',  name:'Roulés de poisson touchés par le vide', qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Filet thalassien',niveau:null,qty:4},{item:'Assortiment de légumes mûrs',niveau:null,qty:2},{item:'Un bon gros morceau de beurre',niveau:null,qty:1},{item:'Ingrédient taverne',niveau:null,qty:1}]},
+  { id:'p4',  name:'Sageailes déformées',                 qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Télésage',niveau:null,qty:3},{item:'Un bon gros morceau de beurre',niveau:null,qty:3},{item:'Sacoche d\'épices',niveau:null,qty:1}]},
+  { id:'p5',  name:'Étalage de Lune-d\'Argent',           qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Poisson-lynx',niveau:null,qty:4},{item:'Ingrédient taverne',niveau:null,qty:1},{item:'Poisson-wyrm des arcanes',niveau:null,qty:4},{item:'Vin de cuisine',niveau:null,qty:1},{item:'Presque du porc',niveau:null,qty:10},{item:'Racine pétrifiée',niveau:null,qty:1}]},
+  { id:'p6',  name:'Biscuits d\'épices',                  qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Un bon gros morceau de beurre',niveau:null,qty:1},{item:'Sacoche d\'épices',niveau:null,qty:3}]},
+  { id:'p7',  name:'Frénésie florale',                    qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Protéines végétales',niveau:null,qty:12},{item:'Ingrédient taverne',niveau:null,qty:5},{item:'Sacoche d\'épices',niveau:null,qty:5}]},
+  { id:'p8',  name:'Célébration d\'Harandar',             qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Protéines végétales',niveau:null,qty:10},{item:'Ingrédient taverne',niveau:null,qty:4},{item:'Vin de cuisine',niveau:null,qty:3},{item:'Particule de magie sauvage',niveau:null,qty:3},{item:'Racine pétrifiée',niveau:null,qty:1},{item:'Azeracine',niveau:null,qty:3}]},
+  { id:'p9',  name:'Farandole quel\'dorei',               qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Ingrédient taverne',niveau:null,qty:1},{item:'Vin de cuisine',niveau:null,qty:1},{item:'Truite des chants éternels',niveau:null,qty:6},{item:'Filet thalassien',niveau:null,qty:10},{item:'Racine pétrifiée',niveau:null,qty:1},{item:'Chantécaille réintroduit',niveau:null,qty:4}]},
+  { id:'p10', name:'Thé de tranquillette',                qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Tranquillette',niveau:null,qty:6},{item:'Essence de wyrm de mana',niveau:null,qty:1}]},
+  { id:'p11', name:'Assortiment de fourrageuse',          qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Protéine végétale',niveau:null,qty:2},{item:'Assortiment de légumes mûrs',niveau:null,qty:1}]},
+  { id:'p12', name:'Brochettes de fleurs',                qty:1, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Protéine végétale',niveau:null,qty:2}]},
+  { id:'p13', name:'Classique de Lune-d\'Argent',         qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Presque du porc',niveau:null,qty:1},{item:'Protéine végétale',niveau:null,qty:1},{item:'Filet thalassien',niveau:null,qty:1}]},
+  { id:'p14', name:'En-cas portable',                     qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Protéine végétale',niveau:null,qty:2},{item:'Sacoche d\'épices',niveau:null,qty:1},{item:'Herbes Thalassiennes',niveau:null,qty:1}]},
+  { id:'p15', name:'Ragoût imprégné de mana',             qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Presque du porc',niveau:null,qty:1},{item:'Protéine végétale',niveau:null,qty:1},{item:'Essence de wyrm de mana',niveau:null,qty:1}]},
+  { id:'p16', name:'Ration de pérégrin',                  qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Presque du porc',niveau:null,qty:2},{item:'Sacoche d\'épices',niveau:null,qty:1},{item:'Herbes Thalassiennes',niveau:null,qty:1}]},
+  { id:'p17', name:'Sandwich rapide',                     qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Presque du porc',niveau:null,qty:2},{item:'Ingrédients de la taverne',niveau:null,qty:1}]},
+  { id:'p18', name:'Assortiment de pêche du Crépuscule',  qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Filet thalassien',niveau:null,qty:10},{item:'Ingrédients de la taverne',niveau:null,qty:1},{item:'Un bon gros morceau de beurre',niveau:null,qty:1}]},
+  { id:'p19', name:'Filet au feu-sorcier',                qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Filet thalassien',niveau:null,qty:3},{item:'Essence de wyrm de mana',niveau:null,qty:1}]},
+  { id:'p20', name:'Sagequeues',                          qty:1, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Télésage',niveau:null,qty:3},{item:'Ingrédients de la taverne',niveau:null,qty:1},{item:'Herbes Thalassiennes',niveau:null,qty:3}]},
+  { id:'p21', name:'Côtelettes enroulées de chardon sanglant', qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Presque du porc',niveau:null,qty:10},{item:'Ingrédients de la taverne',niveau:null,qty:2},{item:'Essence de wyrm de mana',niveau:null,qty:1},{item:'Vin de cuisine',niveau:null,qty:1},{item:'Sanguironce',niveau:null,qty:5}]},
+  { id:'p22', name:'Délice du Puits de soleil',           qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Poisson du Puits de soleil',niveau:null,qty:4},{item:'Filet thalassien',niveau:null,qty:12},{item:'Ingrédients de la taverne',niveau:null,qty:5},{item:'Vin de cuisine',niveau:null,qty:1}]},
+  { id:'p23', name:'Entremets des Chants éternels',        qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Truite des Chants éternels',niveau:null,qty:1},{item:'Un bon gros morceau de beurre',niveau:null,qty:5},{item:'Essence de wyrm de mana',niveau:null,qty:2},{item:'Vin de cuisine',niveau:null,qty:2}]},
+  { id:'p24', name:'Figues gangrebaies',                  qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Protéine végétale',niveau:null,qty:10},{item:'Assortiment de légumes mûrs',niveau:null,qty:4},{item:'Un bon gros morceau de beurre',niveau:null,qty:1},{item:'Essence de wyrm de mana',niveau:null,qty:1}]},
+  { id:'p25', name:'Florequeue grillé',                   qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Vairon florequeue',niveau:null,qty:5},{item:'Filet thalassien',niveau:null,qty:10},{item:'Un bon gros morceau de beurre',niveau:null,qty:5},{item:'Sacoche d\'épices',niveau:null,qty:5},{item:'Vin de cuisine',niveau:null,qty:1}]},
+  { id:'p26', name:'Souper au feu de cheminée',           qty:4, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Presque du porc',niveau:null,qty:7},{item:'Protéine végétale',niveau:null,qty:7},{item:'Ingrédients de la taverne',niveau:null,qty:2},{item:'Sacoche d\'épices',niveau:null,qty:4},{item:'Vin de cuisine',niveau:null,qty:2}]},
+  { id:'p27', name:'Calamar cramoisi',                    qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Pieuvre sinistre',niveau:null,qty:6},{item:'Un bon gros morceau de beurre',niveau:null,qty:3},{item:'Sacoche d\'épices',niveau:null,qty:3},{item:'Sanguironce',niveau:null,qty:6}]},
+  { id:'p28', name:'Délicieux tétra fumé',                qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Tétra distordu',niveau:null,qty:6},{item:'Ingrédients de la taverne',niveau:null,qty:4},{item:'Sacoche d\'épices',niveau:null,qty:4},{item:'Particule d\'énergie primordiale',niveau:null,qty:2}]},
+  { id:'p29', name:'Traque-sang braisé',                  qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Traque-sang',niveau:null,qty:6},{item:'Un bon gros morceau de beurre',niveau:null,qty:3},{item:'Vin de cuisine',niveau:null,qty:3},{item:'Ingrédients de la taverne',niveau:null,qty:3},{item:'Particule d\'énergie primordiale',niveau:null,qty:2}]},
+  { id:'p30', name:'Assiette Néant-et-Vide',              qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Télésage',niveau:null,qty:2},{item:'Pieuvre sinistre',niveau:null,qty:1},{item:'Un bon gros morceau de beurre',niveau:null,qty:1},{item:'Sacoche d\'épices',niveau:null,qty:1},{item:'Ingrédients de la taverne',niveau:null,qty:1}]},
+  { id:'p31', name:'Brochettes scintillantes',            qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Étinsirène',niveau:null,qty:2},{item:'Filet thalassien',niveau:null,qty:5},{item:'Ingrédients de la taverne',niveau:null,qty:1},{item:'Un bon gros morceau de beurre',niveau:null,qty:1}]},
+  { id:'p32', name:'Crabe des racines au beurre',         qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Crabe des racines',niveau:null,qty:6},{item:'Protéines végétales',niveau:null,qty:3},{item:'Un bon gros morceau de beurre',niveau:null,qty:3},{item:'Sacoche d\'épices',niveau:null,qty:3},{item:'Ingrédients de la taverne',niveau:null,qty:1}]},
+  { id:'p33', name:'Rôti Royal',                          qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Ingrédient taverne',niveau:null,qty:4},{item:'Un bon gros morceau de beurre',niveau:null,qty:4},{item:'Assortiment de légumes mûrs',niveau:null,qty:4},{item:'Presque du porc',niveau:null,qty:15}]},
+  { id:'p34', name:'Rôti incroyablement royal',           qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Ingrédient taverne',niveau:null,qty:4},{item:'Un bon gros morceau de beurre',niveau:null,qty:4},{item:'Assortiment de légumes mûrs',niveau:null,qty:4},{item:'Protéines végétales',niveau:null,qty:15}]},
+  { id:'p35', name:'Bento de champion',                   qty:2, metier:'cuisine', prodNiveau:null,
+    ingredients:[{item:'Ingrédient taverne',niveau:null,qty:5},{item:'Protéines végétales',niveau:null,qty:5},{item:'Presque du porc',niveau:null,qty:5},{item:'Filet thalassien',niveau:null,qty:5},{item:'Sacoche d\'épices',niveau:null,qty:5}]},
+];
+
+// ══════════════════════════════════════════════
+// DEFAULTS MARCHANDS
+// ══════════════════════════════════════════════
 const DEFAULTS = [
   {name:'Vin de cuisine',                g:0,s:10,c:10},
   {name:'Un bon gros morceau de beurre', g:0,s:8, c:60},
-  {name:'Assortiments de légumes mûrs',  g:0,s:11,c:25},
-  {name:'Ingrédients de taverne',        g:0,s:10,c:0 },
+  {name:'Assortiment de légumes mûrs',   g:0,s:11,c:25},
+  {name:'Ingrédients de la taverne',     g:0,s:10,c:0 },
   {name:'Herbes Thalassiennes',          g:0,s:12,c:25},
   {name:'Essence de wyrm de mana',       g:0,s:7, c:70},
   {name:'Sacoche d\'épices',             g:0,s:10,c:75},
 ];
 
-// ══ THEME ══
+// ══════════════════════════════════════════════
+// THEME
+// ══════════════════════════════════════════════
 function toggleTheme(){
   const d=document.documentElement, dark=d.getAttribute('data-theme')==='dark';
   d.setAttribute('data-theme',dark?'light':'dark');
@@ -578,7 +707,9 @@ function loadTheme(){
   try{const t=localStorage.getItem('pf_theme');if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');document.getElementById('icon-moon').style.display='none';document.getElementById('icon-sun').style.display='block';}}catch(e){}
 }
 
-// ══ STEPPER ══
+// ══════════════════════════════════════════════
+// STEPPER
+// ══════════════════════════════════════════════
 let currentStep = 1;
 function goStep(n){
   document.querySelectorAll('.step').forEach((el,i)=>{
@@ -588,12 +719,14 @@ function goStep(n){
     else if(s<n) el.classList.add('done');
   });
   currentStep=n;
-  if(n===5) calcResults();
+  if(n===4) calcResults();
 }
 function nextStep(n){ goStep(Math.min(n+1,TOTAL_STEPS)); window.scrollTo({top:0,behavior:'smooth'}); }
 function prevStep(n){ goStep(Math.max(n-1,1)); window.scrollTo({top:0,behavior:'smooth'}); }
 
-// ══ GSC HELPERS ══
+// ══════════════════════════════════════════════
+// GSC HELPERS
+// ══════════════════════════════════════════════
 function toCopper(g,s,c){return(parseInt(g)||0)*10000+(parseInt(s)||0)*100+(parseInt(c)||0);}
 function fromCopper(cu){const a=Math.abs(Math.round(cu||0));return{g:Math.floor(a/10000),s:Math.floor((a%10000)/100),c:a%100,neg:cu<0};}
 function csvToCopper(raw){const n=parseFloat(String(raw).replace(/"/g,'').trim());return isNaN(n)?0:Math.round(n);}
@@ -615,7 +748,9 @@ function makeGSCInput(pfx,g,s,c){
 }
 function readGSC(pfx){return toCopper(document.getElementById(pfx+'-g')?.value||0,document.getElementById(pfx+'-s')?.value||0,document.getElementById(pfx+'-c')?.value||0);}
 
-// ══ ICONS ══
+// ══════════════════════════════════════════════
+// ICONS
+// ══════════════════════════════════════════════
 const I={
   check:`<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`,
   x:`<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
@@ -625,8 +760,23 @@ const I={
   plus:`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
 };
 
-// ══ CSV ══
+// ══════════════════════════════════════════════
+// CSV PARSING — avec support qualité
+// ══════════════════════════════════════════════
+// Détecte "Nom Niveau X" dans un nom CSV et renvoie {item, niveau}
+function parseItemName(rawName) {
+  const m = rawName.trim().match(/^(.+?)\s+[Nn]iveau\s+(\d+)$/);
+  if (m) return { item: m[1].trim(), niveau: parseInt(m[2]) };
+  return { item: rawName.trim(), niveau: null };
+}
+
+// Clé de lookup : item + niveau (null → '')
+function itemKey(item, niveau) {
+  return (item||'').toLowerCase().trim() + '|' + (niveau !== null && niveau !== undefined ? niveau : '');
+}
+
 function splitCSV(line){const r=[];let c='',q=false;for(let ch of line){if(ch==='"'){q=!q;c+=ch;}else if(ch===','&&!q){r.push(c);c='';}else c+=ch;}r.push(c);return r;}
+
 function parseCSV(text){
   const lines=text.trim().split('\n').filter(l=>l.trim());
   if(lines.length<2)return{};
@@ -634,41 +784,82 @@ function parseCSV(text){
   for(let i=1;i<lines.length;i++){
     const p=splitCSV(lines[i]);if(p.length<2)continue;
     const copper=csvToCopper(p[0]);
-    const name=p[1].replace(/^"|"$/g,'').trim();
-    if(name)out[name.toLowerCase()]={name,copper,src:'market'};
+    const rawName=p[1].replace(/^"|"$/g,'').trim();
+    if(!rawName)continue;
+    const {item, niveau} = parseItemName(rawName);
+    const key = itemKey(item, niveau);
+    out[key]={name:rawName, item, niveau, copper, src:'market'};
   }
   return out;
 }
+
 function allComps(){
   const a=Object.assign({},comps);
-  merchants.forEach(m=>{if(m.name){const copper=toCopper(m.g,m.s,m.c);a[m.name.toLowerCase().trim()]={name:m.name,copper,src:'merchant'};}});
+  merchants.forEach(m=>{
+    if(m.name){
+      const copper=toCopper(m.g,m.s,m.c);
+      const key=itemKey(m.name, null);
+      a[key]={name:m.name, item:m.name, niveau:null, copper, src:'merchant'};
+    }
+  });
   return a;
 }
+
+// Recherche tolérante : exact sur clé, sinon partielle sur le nom de l'item
+function findEntry(itemName, niveau, dict){
+  if(!itemName)return null;
+  const cleanItem = itemName.toLowerCase().trim();
+  // 1. Clé exacte avec niveau
+  const k = itemKey(itemName, niveau);
+  if(dict[k])return dict[k];
+  // 2. Clé exacte sans niveau (niveau null)
+  const k0 = itemKey(itemName, null);
+  if(dict[k0])return dict[k0];
+  // 3. Recherche partielle sur item
+  for(const entry of Object.values(dict)){
+    const entryItem=(entry.item||'').toLowerCase().trim();
+    if(entryItem===cleanItem)return entry;
+    if(entryItem.includes(cleanItem)||cleanItem.includes(entryItem))return entry;
+  }
+  return null;
+}
+
 function parseAll(){
   comps=parseCSV(document.getElementById('csv-comp').value);
   prods=parseCSV(document.getElementById('csv-prod').value);
   const nc=Object.keys(comps).length,np=Object.keys(prods).length,nm=merchants.filter(m=>m.name).length;
   document.getElementById('status').style.display='flex';
   document.getElementById('status-txt').textContent=`${nc} composant(s) · ${nm} marchand(s) · ${np} plat(s) importés`;
-  renderPreview();renderRecipes();
+  renderPreview();renderRecipes();renderRecipeGrid();
 }
+
 function renderPreview(){
   const a=allComps(),el=document.getElementById('preview');
   if(!Object.keys(a).length&&!Object.keys(prods).length){el.innerHTML='';return;}
-  const mkt=Object.values(a).filter(c=>c.src==='market').slice(0,6);
-  const mch=Object.values(a).filter(c=>c.src==='merchant').slice(0,6);
+  const all=Object.values(a);
+  const mkt=all.filter(c=>c.src==='market').slice(0,6);
+  const mch=all.filter(c=>c.src==='merchant').slice(0,4);
   const pv=Object.values(prods).slice(0,6);
   let h='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">';
   h+='<div class="card"><div class="card-hdr"><div class="card-title">Composants</div></div><div class="card-body" style="padding:10px 14px;">';
-  [...mkt,...mch].forEach(c=>{const tag=c.src==='merchant'?`<span class="badge badge-merch" style="font-size:10px;padding:1px 5px;">${I.store}</span>`:'';h+=`<div class="prev-item"><span style="display:flex;align-items:center;gap:5px;">${c.name}${tag}</span>${gscHTML(c.copper)}</div>`;});
+  [...mkt,...mch].forEach(c=>{
+    const tag=c.src==='merchant'?`<span class="badge badge-merch" style="font-size:10px;padding:1px 5px;">${I.store}</span>`:'';
+    const qBadge=c.niveau?`<span class="badge badge-q${c.niveau}" style="font-size:10px;padding:1px 5px;">N${c.niveau}</span>`:'';
+    h+=`<div class="prev-item"><span style="display:flex;align-items:center;gap:5px;">${c.item}${qBadge}${tag}</span>${gscHTML(c.copper)}</div>`;
+  });
   h+='</div></div>';
   h+='<div class="card"><div class="card-hdr"><div class="card-title">Plats détectés</div></div><div class="card-body" style="padding:10px 14px;">';
-  pv.forEach(p=>{h+=`<div class="prev-item"><span>${p.name}</span>${gscHTML(p.copper)}</div>`;});
+  pv.forEach(p=>{
+    const qBadge=p.niveau?`<span class="badge badge-q${p.niveau}" style="font-size:10px;padding:1px 5px;">N${p.niveau}</span>`:'';
+    h+=`<div class="prev-item"><span style="display:flex;align-items:center;gap:5px;">${p.item}${qBadge}</span>${gscHTML(p.copper)}</div>`;
+  });
   h+='</div></div></div>';
   el.innerHTML=h;
 }
 
-// ══ MERCHANTS ══
+// ══════════════════════════════════════════════
+// MARCHANDS
+// ══════════════════════════════════════════════
 function loadMerchants(){
   try{const s=localStorage.getItem('pf_merch_v3');if(s){merchants=JSON.parse(s);return;}}catch(e){}
   merchants=DEFAULTS.map((d,i)=>({id:Date.now()+i,name:d.name,g:d.g,s:d.s,c:d.c}));
@@ -683,8 +874,6 @@ function upMerchGSC(id){
   m.s=parseInt(document.getElementById('m'+id+'-s').value)||0;
   m.c=parseInt(document.getElementById('m'+id+'-c').value)||0;
   saveMerchants();
-  const el=document.getElementById('m'+id+'-preview');
-  if(el)el.innerHTML=gscHTML(toCopper(m.g,m.s,m.c));
 }
 function resetMerchants(){
   if(!confirm('Réinitialiser les prix marchands aux valeurs par défaut ?'))return;
@@ -696,65 +885,171 @@ function renderMerchants(){
   let h='';
   merchants.forEach(m=>{
     h+=`<div class="merch-row">
-      <input type="text" placeholder="Nom de l'ingrédient" value="${esc(m.name)}" oninput="upMerchName(${m.id},this.value)" style="flex:1;min-width:140px;">
-      <div class="gsc-field"><input type="number" id="m${m.id}-g" min="0" value="${m.g||0}" style="width:44px;" oninput="upMerchGSC(${m.id})"><div class="coin coin-g"></div></div>
-      <div class="gsc-field"><input type="number" id="m${m.id}-s" min="0" max="99" value="${m.s||0}" style="width:44px;" oninput="upMerchGSC(${m.id})"><div class="coin coin-s"></div></div>
-      <div class="gsc-field"><input type="number" id="m${m.id}-c" min="0" max="99" value="${m.c||0}" style="width:44px;" oninput="upMerchGSC(${m.id})"><div class="coin coin-c"></div></div>
-      <span id="m${m.id}-preview" style="font-size:12px;min-width:80px;">${gscHTML(toCopper(m.g,m.s,m.c))}</span>
+      <input type="text" placeholder="Nom de l'ingrédient" value="${esc(m.name)}" oninput="upMerchName(${m.id},this.value)" style="flex:1;min-width:120px;">
+      <div class="gsc-field"><input type="number" id="m${m.id}-g" min="0" value="${m.g||0}" style="width:40px;" oninput="upMerchGSC(${m.id})"><div class="coin coin-g"></div></div>
+      <div class="gsc-field"><input type="number" id="m${m.id}-s" min="0" max="99" value="${m.s||0}" style="width:40px;" oninput="upMerchGSC(${m.id})"><div class="coin coin-s"></div></div>
+      <div class="gsc-field"><input type="number" id="m${m.id}-c" min="0" max="99" value="${m.c||0}" style="width:40px;" oninput="upMerchGSC(${m.id})"><div class="coin coin-c"></div></div>
       <button class="btn btn-sm btn-ghost btn-del" onclick="removeMerchant(${m.id})">${I.trash}</button>
     </div>`;
   });
   el.innerHTML=h;
+  // Badge count
+  const el2=document.getElementById('merch-count-badge');
+  if(el2)el2.textContent=`${merchants.length} ingrédient${merchants.length>1?'s':''}`;
+}
+function toggleMerchPanel(){
+  const btn=document.getElementById('merch-toggle-btn');
+  const panel=document.getElementById('merch-panel');
+  btn.classList.toggle('open');
+  panel.classList.toggle('open');
+}
+function toggleCustomPanel(){
+  const btn=document.getElementById('custom-toggle-btn');
+  const panel=document.getElementById('custom-panel');
+  btn.classList.toggle('open');
+  panel.classList.toggle('open');
 }
 
-// ══ CRAFT STATS ══
-function getStats(){
-  return{
-    multicraft:parseFloat(document.getElementById('stat-multicraft')?.value||0)||0,
-    resourcefulness:parseFloat(document.getElementById('stat-resourcefulness')?.value||0)||0,
-  };
+// ══════════════════════════════════════════════
+// RECETTES GRILLE (cartes cliquables)
+// ══════════════════════════════════════════════
+function setMetier(m){ currentMetier=m; renderRecipeGrid(); }
+
+function filterRecipes(){
+  renderRecipeGrid();
 }
-function updateStatsSummary(){
-  const{multicraft,resourcefulness}=getStats();
-  // Multicraft: each proc yields avg 1.5x bonus items → expected value multiplier
-  const mcMult=1+(multicraft/100)*1.5;
-  // Resourcefulness: proc chance × avg 15% material saved per ingredient
-  const rfSaving=(resourcefulness/100)*0.15;
-  const el=document.getElementById('stats-summary');
-  if(el){
-    el.innerHTML=`
-      <strong>Impact estimé sur le profit moyen :</strong><br>
-      ${multicraft>0?`Multicraft ${multicraft}% → valeur produite moyenne ×${mcMult.toFixed(3)} (+${((mcMult-1)*100).toFixed(1)}% de rendement)`:'Multicraft : désactivé'}<br>
-      ${resourcefulness>0?`Resourcefulness ${resourcefulness}% → coût matériaux réduit de ~${(rfSaving*100).toFixed(1)}% en moyenne`:'Resourcefulness : désactivé'}
-    `;
+
+function renderRecipeGrid(){
+  const grid=document.getElementById('recipe-grid');if(!grid)return;
+  const search=(document.getElementById('recipe-search')?.value||'').toLowerCase().trim();
+  const a=allComps();
+
+  const filtered=PRESET_RECIPES.filter(r=>{
+    if(r.metier!==currentMetier)return false;
+    if(search&&!r.name.toLowerCase().includes(search))return false;
+    return true;
+  });
+
+  let h='';
+  filtered.forEach(r=>{
+    const sel=selectedPresets.has(r.id);
+    // check ingredient availability
+    const missing=r.ingredients.filter(ing=>!findEntry(ing.item,ing.niveau,a)&&!merchants.find(m=>m.name.toLowerCase()===ing.item.toLowerCase()));
+    const hasMissing=missing.length>0&&Object.keys(comps).length>0;
+    const ingCount=r.ingredients.length;
+
+    h+=`<div class="rc-card ${sel?'selected':''} ${hasMissing?'rc-card-warn':''}" onclick="togglePreset('${r.id}')">
+      <div class="rc-card-check">${sel?I.check:''}</div>
+      <div class="rc-card-name">${esc(r.name)}</div>
+      <div class="rc-card-meta">
+        <span>×${r.qty} par craft</span>
+        <span>·</span>
+        <span>${ingCount} ingrédient${ingCount>1?'s':''}</span>
+        ${hasMissing?`<span class="badge badge-warn" style="font-size:10px;padding:1px 5px;">${I.warn} ${missing.length} manquant${missing.length>1?'s':''}</span>`:''}
+      </div>
+    </div>`;
+  });
+
+  if(!filtered.length){
+    h=`<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-3);font-size:13px;">Aucune recette trouvée</div>`;
   }
-}
-document.addEventListener('input',e=>{if(e.target.id==='stat-multicraft'||e.target.id==='stat-resourcefulness')updateStatsSummary();});
 
-// ══ RECIPES ══
-function loadRecipes(){
-  try{const s=localStorage.getItem('pf_rec_v3');if(s){recipes=JSON.parse(s);return;}}catch(e){}
-  recipes=[{id:Date.now(),name:'',qty:1,ingredients:[{name:'',qty:1}]}];
+  grid.innerHTML=h;
+  updateSelCount();
 }
-function saveRecipes(){try{localStorage.setItem('pf_rec_v3',JSON.stringify(recipes));}catch(e){}}
-function addRecipe(){recipes.push({id:Date.now(),name:'',qty:1,ingredients:[{name:'',qty:1}]});saveRecipes();renderRecipes();}
+
+function togglePreset(id){
+  if(selectedPresets.has(id)) selectedPresets.delete(id);
+  else selectedPresets.add(id);
+  saveSelectedPresets();
+  renderRecipeGrid();
+}
+function selectAllRecipes(){
+  PRESET_RECIPES.filter(r=>r.metier===currentMetier).forEach(r=>selectedPresets.add(r.id));
+  saveSelectedPresets();renderRecipeGrid();
+}
+function deselectAllRecipes(){
+  PRESET_RECIPES.filter(r=>r.metier===currentMetier).forEach(r=>selectedPresets.delete(r.id));
+  saveSelectedPresets();renderRecipeGrid();
+}
+function updateSelCount(){
+  const el=document.getElementById('sel-count');if(!el)return;
+  const n=PRESET_RECIPES.filter(r=>r.metier===currentMetier&&selectedPresets.has(r.id)).length;
+  const total=PRESET_RECIPES.filter(r=>r.metier===currentMetier).length;
+  el.textContent=`${n} / ${total} sélectionné${n>1?'s':''}`;
+}
+function saveSelectedPresets(){
+  try{localStorage.setItem('pf_sel_presets',JSON.stringify([...selectedPresets]));}catch(e){}
+}
+function loadSelectedPresets(){
+  try{const s=localStorage.getItem('pf_sel_presets');if(s){selectedPresets=new Set(JSON.parse(s));return;}}catch(e){}
+  // Par défaut : aucune sélectionnée
+  selectedPresets=new Set();
+}
+
+// ══════════════════════════════════════════════
+// RECETTES PERSONNALISÉES (custom)
+// ══════════════════════════════════════════════
+function loadRecipes(){
+  try{const s=localStorage.getItem('pf_rec_v4');if(s){recipes=JSON.parse(s);return;}}catch(e){}
+  recipes=[];
+}
+function saveRecipes(){try{localStorage.setItem('pf_rec_v4',JSON.stringify(recipes));}catch(e){}}
+function addRecipe(){
+  recipes.push({id:Date.now(),name:'',qty:1,prodNiveau:null,metier:'cuisine',
+    ingredients:[{item:'',niveau:null,qty:1}]});
+  saveRecipes();renderRecipes();
+}
 function removeRecipe(id){recipes=recipes.filter(r=>r.id!==id);saveRecipes();renderRecipes();}
-function addIng(id){const r=recipes.find(r=>r.id===id);if(r)r.ingredients.push({name:'',qty:1});saveRecipes();renderRecipes();}
-function removeIng(id,i){const r=recipes.find(r=>r.id===id);if(r)r.ingredients.splice(i,1);saveRecipes();renderRecipes();}
-function upRec(id,f,v){const r=recipes.find(r=>r.id===id);if(r)r[f]=f==='qty'?parseFloat(v)||1:v;saveRecipes();}
-function upIng(id,i,f,v){const r=recipes.find(r=>r.id===id);if(r&&r.ingredients[i])r.ingredients[i][f]=f==='qty'?parseFloat(v)||1:v;saveRecipes();}
+function addIng(id){
+  const r=recipes.find(r=>r.id===id);
+  if(r)r.ingredients.push({item:'',niveau:null,qty:1});
+  saveRecipes();renderRecipes();
+}
+function removeIng(id,i){
+  const r=recipes.find(r=>r.id===id);
+  if(r)r.ingredients.splice(i,1);
+  saveRecipes();renderRecipes();
+}
+function upRec(id,f,v){
+  const r=recipes.find(r=>r.id===id);
+  if(r)r[f]=f==='qty'?parseFloat(v)||1:f==='prodNiveau'?(v==='null'?null:parseInt(v)):v;
+  saveRecipes();
+}
+function upIng(id,i,f,v){
+  const r=recipes.find(r=>r.id===id);
+  if(r&&r.ingredients[i])
+    r.ingredients[i][f]=f==='qty'?parseFloat(v)||1:f==='niveau'?(v==='null'?null:parseInt(v)):v;
+  saveRecipes();
+}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;');}
-function prodOpts(sel){let o='<option value="">— sélectionner —</option>';Object.values(prods).forEach(p=>{o+=`<option value="${esc(p.name)}" ${p.name===sel?'selected':''}>${p.name}</option>`;});if(sel&&!prods[sel.toLowerCase()])o+=`<option value="${esc(sel)}" selected>${sel}</option>`;return o;}
+
+function prodOpts(sel,selNiv){
+  let o='<option value="">— sélectionner —</option>';
+  Object.values(prods).forEach(p=>{
+    const v=p.name;
+    o+=`<option value="${esc(v)}" ${v===sel?'selected':''}>${p.item}${p.niveau?' (N'+p.niveau+')':''}</option>`;
+  });
+  return o;
+}
 function compOpts(sel){
   const a=allComps();
   const mkt=Object.values(a).filter(c=>c.src==='market');
   const mch=Object.values(a).filter(c=>c.src==='merchant');
   let o='<option value="">— sélectionner —</option>';
-  if(mkt.length){o+='<optgroup label="Marché">';mkt.forEach(c=>{o+=`<option value="${esc(c.name)}" ${c.name===sel?'selected':''}>${c.name}</option>`;});o+='</optgroup>';}
-  if(mch.length){o+='<optgroup label="Marchand (prix fixe)">';mch.forEach(c=>{o+=`<option value="${esc(c.name)}" ${c.name===sel?'selected':''}>${c.name}</option>`;});o+='</optgroup>';}
-  if(sel&&!a[sel.toLowerCase()])o+=`<option value="${esc(sel)}" selected>${sel}</option>`;
+  if(mkt.length){o+='<optgroup label="Marché">';mkt.forEach(c=>{o+=`<option value="${esc(c.item)}" ${c.item===sel?'selected':''}>${c.item}${c.niveau?' (N'+c.niveau+')':''}</option>`;});o+='</optgroup>';}
+  if(mch.length){o+='<optgroup label="Marchand (prix fixe)">';mch.forEach(c=>{o+=`<option value="${esc(c.item)}" ${c.item===sel?'selected':''}>${c.item}</option>`;});o+='</optgroup>';}
   return o;
 }
+
+function niveauSel(val, onchange, cls='q') {
+  return `<div class="qual-sel">
+    <button type="button" class="qual-btn q1 ${val===1?'active':''}" onclick="${onchange.replace('VAL','1')}"  >N1</button>
+    <button type="button" class="qual-btn q2 ${val===2?'active':''}" onclick="${onchange.replace('VAL','2')}"  >N2</button>
+    <button type="button" class="qual-btn    ${val===null?'active':''}" onclick="${onchange.replace('VAL','null')}">—</button>
+  </div>`;
+}
+
 function renderRecipes(){
   const el=document.getElementById('recipes-list');if(!el)return;
   const a=allComps();let h='';
@@ -766,22 +1061,25 @@ function renderRecipes(){
           <select style="flex:1;min-width:160px;" onchange="upRec(${r.id},'name',this.value)">${prodOpts(r.name)}</select>
           <input type="text" value="${esc(r.name)}" placeholder="ou saisir manuellement" style="max-width:170px;" oninput="upRec(${r.id},'name',this.value)">
         </div>
-        <div style="display:flex;align-items:center;gap:7px;">
-          <span style="font-size:12px;color:var(--text-2);white-space:nowrap;">Qté produite :</span>
-          <input type="number" class="qty" value="${r.qty||1}" min="1" style="width:65px;" onchange="upRec(${r.id},'qty',this.value)">
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+          <span style="font-size:12px;color:var(--text-2);white-space:nowrap;">Qté :</span>
+          <input type="number" class="qty" value="${r.qty||1}" min="1" style="width:60px;" onchange="upRec(${r.id},'qty',this.value)">
+          <span style="font-size:12px;color:var(--text-2);white-space:nowrap;">Qualité produit :</span>
+          ${niveauSel(r.prodNiveau, `upRec(${r.id},'prodNiveau','VAL')`)}
           <button class="btn btn-sm btn-del" onclick="removeRecipe(${r.id})">${I.trash}</button>
         </div>
       </div>
       <div class="rc-body">
         <div class="sec-label" style="margin-bottom:8px;">Ingrédients</div>`;
     r.ingredients.forEach((ing,idx)=>{
-      const isMerch=ing.name&&a[ing.name.toLowerCase()]&&a[ing.name.toLowerCase()].src==='merchant';
+      const isMerch=ing.item&&a[itemKey(ing.item,null)]&&a[itemKey(ing.item,null)].src==='merchant';
       h+=`<div class="ing-row">
-        <select style="flex:2;min-width:140px;" onchange="upIng(${r.id},${idx},'name',this.value)">${compOpts(ing.name)}</select>
-        <input type="text" value="${esc(ing.name)}" placeholder="saisir manuellement" style="max-width:145px;" oninput="upIng(${r.id},${idx},'name',this.value)">
-        ${isMerch?`<span class="badge badge-merch">${I.store} marchand</span>`:''}
+        <select style="flex:2;min-width:130px;" onchange="upIng(${r.id},${idx},'item',this.value)">${compOpts(ing.item)}</select>
+        <input type="text" value="${esc(ing.item)}" placeholder="ou saisir" style="max-width:130px;" oninput="upIng(${r.id},${idx},'item',this.value)">
+        ${niveauSel(ing.niveau, `upIng(${r.id},${idx},'niveau','VAL')`)}
+        ${isMerch?`<span class="badge badge-merch">${I.store}</span>`:''}
         <span style="color:var(--text-3);">×</span>
-        <input type="number" class="qty" value="${ing.qty}" min="0.001" step="0.001" style="width:72px;" onchange="upIng(${r.id},${idx},'qty',this.value)">
+        <input type="number" class="qty" value="${ing.qty}" min="0.001" step="0.001" style="width:70px;" onchange="upIng(${r.id},${idx},'qty',this.value)">
         <button class="btn btn-sm btn-ghost btn-del" onclick="removeIng(${r.id},${idx})">${I.trash}</button>
       </div>`;
     });
@@ -790,48 +1088,74 @@ function renderRecipes(){
   el.innerHTML=h;
 }
 
-// ══ RESULTS ══
-function findEntry(name,dict){if(!name)return null;const k=name.toLowerCase().trim();if(dict[k])return dict[k];for(const key of Object.keys(dict)){if(key.includes(k)||k.includes(key))return dict[key];}return null;}
+// ══════════════════════════════════════════════
+// STATS
+// ══════════════════════════════════════════════
+function getStats(){
+  return{
+    multicraft:parseFloat(document.getElementById('stat-multicraft')?.value||0)||0,
+    resourcefulness:parseFloat(document.getElementById('stat-resourcefulness')?.value||0)||0,
+  };
+}
+function updateStatsSummary(){
+  const{multicraft,resourcefulness}=getStats();
+  const mcMult=1+(multicraft/100)*1.5;
+  const rfSaving=(resourcefulness/100)*0.15;
+  const el=document.getElementById('stats-summary');
+  if(el){
+    el.innerHTML=`<strong>Impact estimé sur le profit moyen :</strong><br>
+      ${multicraft>0?`Multicraft ${multicraft}% → valeur produite moyenne ×${mcMult.toFixed(3)} (+${((mcMult-1)*100).toFixed(1)}%)`:'Multicraft : désactivé'}<br>
+      ${resourcefulness>0?`Resourcefulness ${resourcefulness}% → coût matériaux réduit de ~${(rfSaving*100).toFixed(1)}% (composants marché)`:'Resourcefulness : désactivé'}`;
+  }
+}
+document.addEventListener('input',e=>{
+  if(e.target.id==='stat-multicraft'||e.target.id==='stat-resourcefulness')updateStatsSummary();
+});
 
+// ══════════════════════════════════════════════
+// RÉSULTATS
+// ══════════════════════════════════════════════
 function calcResults(){
   const thrCopper=readGSC('thr');
   const{multicraft,resourcefulness}=getStats();
-  const a=allComps();const res=[];
-
-  // Multicraft expected output multiplier: base 1 + proc_chance * 1.5 bonus per proc
+  const a=allComps();
+  const res=[];
   const mcMult=1+(multicraft/100)*1.5;
-  // Resourcefulness: per craft, each ingredient has rf% chance to save avg 15% of quantity
   const rfCostMult=1-((resourcefulness/100)*0.15);
 
-  recipes.forEach(r=>{
+  // Fusionner recettes pré-enregistrées sélectionnées + recettes custom
+  const activePresets=PRESET_RECIPES.filter(r=>selectedPresets.has(r.id));
+  const allRecipes=[...activePresets, ...recipes.filter(r=>r.name)];
+
+  allRecipes.forEach(r=>{
     if(!r.name)return;
-    const pe=findEntry(r.name,prods);if(!pe)return;
+    // Chercher le produit fini : avec niveau si spécifié
+    const pe=findEntry(r.name, r.prodNiveau||null, prods);
+    if(!pe)return;
     const sellNetBase=Math.round(pe.copper*0.95);
-    // Apply multicraft to sell value (more units produced on average)
     const sellNetAdj=Math.round(sellNetBase*mcMult);
     const qty=r.qty||1;
     let costBase=0,missing=false;
     const det=[];
     r.ingredients.forEach(ing=>{
-      if(!ing.name)return;
-      const e=findEntry(ing.name,a);
-      if(!e){missing=true;det.push({name:ing.name,qty:ing.qty,copper:null,src:null});return;}
+      const iName=ing.item||ing.name||'';
+      if(!iName)return;
+      const e=findEntry(iName, ing.niveau||null, a);
+      if(!e){missing=true;det.push({name:iName,niveau:ing.niveau,qty:ing.qty,copper:null,src:null});return;}
       const ingCost=Math.round(e.copper*ing.qty);
       costBase+=ingCost;
-      det.push({name:ing.name,qty:ing.qty,copper:e.copper,src:e.src,ingCost});
+      det.push({name:iName,niveau:ing.niveau,qty:ing.qty,copper:e.copper,src:e.src,ingCost});
     });
-    // Apply resourcefulness to market ingredients only
     const costAdj=det.reduce((sum,d)=>{
       if(d.copper===null)return sum;
       const base=Math.round(d.copper*d.qty);
-      // Only market ingredients are affected by resourcefulness
       return sum+(d.src==='market'?Math.round(base*rfCostMult):base);
     },0);
     const cpu=Math.round(costAdj/qty);
     const profit=sellNetAdj-cpu;
     const margin=cpu>0?(profit/cpu)*100:0;
     const profitBase=Math.round(sellNetBase-Math.round(costBase/qty));
-    res.push({name:r.name,sellCopper:pe.copper,sellNetBase,sellNetAdj,cpu,costBase:Math.round(costBase/qty),profit,profitBase,margin,missing,det,qty,mcMult,rfCostMult});
+    res.push({name:r.name,prodNiveau:r.prodNiveau,sellCopper:pe.copper,sellNetBase,sellNetAdj,cpu,costBase:Math.round(costBase/qty),profit,profitBase,margin,missing,det,qty,mcMult,rfCostMult,isPreset:!!r.id?.toString().startsWith('p')});
   });
 
   if(sortBy==='profit')res.sort((a,b)=>b.profit-a.profit);
@@ -851,16 +1175,16 @@ function calcResults(){
   `;
 
   if(!res.length){
-    document.getElementById('results-table').innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg><p>Aucune recette calculable.<br>Vérifiez vos données et recettes.</p></div>`;
+    document.getElementById('results-table').innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg><p>Aucune recette sélectionnée ou calculable.<br>Retournez à l'étape 3 pour choisir vos recettes.</p></div>`;
     return;
   }
 
   let t=`<div class="tbl-wrap"><table><thead><tr>
     <th>Recette</th>
     <th>Ingrédients</th>
-    <th class="tr">Coût craft</th>
+    <th class="tr">Coût/u</th>
     <th class="tr">Vente nette</th>
-    <th class="tr">Profit moyen${hasStats?' ✦':''}</th>
+    <th class="tr">Profit${hasStats?' ✦':''}</th>
     <th class="tr">Marge</th>
     <th>Statut</th>
   </tr></thead><tbody>`;
@@ -872,16 +1196,19 @@ function calcResults(){
         ?`<span class="badge badge-ok">${I.check} Rentable</span>`
         :`<span class="badge badge-no">${I.x} Non rentable</span>`;
 
+    const qBadge=r.prodNiveau?`<span class="badge badge-q${r.prodNiveau}" style="font-size:10px;vertical-align:middle;"> N${r.prodNiveau}</span>`:'';
+
     const ings=r.det.map(d=>{
       const tag=d.src==='merchant'?`<span class="badge badge-merch" style="font-size:10px;padding:1px 4px;">${I.store}</span>`:'';
+      const qTag=d.niveau?`<span class="badge badge-q${d.niveau}" style="font-size:10px;padding:1px 4px;">N${d.niveau}</span>`:'';
       const cost=d.copper!==null?gscHTML(Math.round(d.copper*d.qty)):`<span style="color:var(--warning);">inconnu</span>`;
-      return`<div style="display:flex;align-items:center;gap:4px;padding:1px 0;flex-wrap:wrap;">${tag}<span>${d.name}</span><span style="color:var(--text-3);">×${d.qty}</span>${cost}</div>`;
+      return`<div style="display:flex;align-items:center;gap:4px;padding:1px 0;flex-wrap:wrap;">${tag}${qTag}<span>${d.name}</span><span style="color:var(--text-3);">×${d.qty}</span>${cost}</div>`;
     }).join('');
 
     const profitNote=hasStats&&!r.missing?`<br><span style="font-size:11px;color:var(--text-3);">sans stats: ${gscHTML(r.profitBase)}</span>`:'';
 
     t+=`<tr>
-      <td style="font-weight:500;white-space:nowrap;">${r.name}<br><span style="font-size:11px;color:var(--text-3);">×${r.qty} par craft</span></td>
+      <td style="font-weight:500;white-space:nowrap;">${r.name}${qBadge}<br><span style="font-size:11px;color:var(--text-3);">×${r.qty} par craft</span></td>
       <td style="font-size:12px;">${ings}</td>
       <td class="tr">${r.missing?'<span style="color:var(--warning);">?</span>':gscHTML(r.cpu)}</td>
       <td class="tr">${gscHTML(r.sellNetAdj)}</td>
@@ -891,16 +1218,19 @@ function calcResults(){
     </tr>`;
   });
   t+=`</tbody></table></div>`;
-  if(hasStats)t+=`<p style="font-size:11px;color:var(--text-3);margin-top:8px;padding:0 2px;">✦ Profit moyen calculé avec Multicraft ${multicraft}% (×${res[0]?.mcMult.toFixed(3)}) et Resourcefulness ${resourcefulness}% (coût ×${res[0]?.rfCostMult.toFixed(3)})</p>`;
+  if(hasStats)t+=`<p style="font-size:11px;color:var(--text-3);margin-top:8px;padding:0 2px;">✦ Multicraft ${multicraft}% (×${mcMult.toFixed(3)}) · Resourcefulness ${resourcefulness}% (coût ×${rfCostMult.toFixed(3)})</p>`;
   document.getElementById('results-table').innerHTML=t;
 }
 
 function setSort(s){sortBy=s;document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));document.getElementById('sort-'+s).classList.add('active');calcResults();}
 
-// ══ INIT ══
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
 loadTheme();
 loadMerchants(); renderMerchants();
-loadRecipes(); renderRecipes();
+loadSelectedPresets();
+loadRecipes(); renderRecipes(); renderRecipeGrid();
 updateStatsSummary();
 document.getElementById('thr-input').innerHTML=makeGSCInput('thr',0,0,0);
 </script>
