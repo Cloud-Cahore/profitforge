@@ -286,6 +286,109 @@ footer { border-top: 1px solid var(--border); padding: 16px 24px; text-align: ce
 footer strong { color: var(--text-2); }
 
 @media(max-width:600px) { .two-col{grid-template-columns:1fr;} .stats-grid{grid-template-columns:1fr;} .hdr-badge{display:none;} .recipe-grid{grid-template-columns:1fr 1fr;} }
+
+/* ── Modal Talents ── */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:1000; align-items:flex-start; justify-content:center; padding:24px 16px; overflow-y:auto; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:var(--bg); border:1px solid var(--border); border-radius:var(--r-xl); width:100%; max-width:1100px; box-shadow:var(--shadow-md); display:flex; flex-direction:column; max-height:calc(100vh - 48px); }
+.modal-hdr { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.modal-title { font-size:15px; font-weight:600; letter-spacing:-.01em; }
+.modal-close { width:28px; height:28px; border-radius:var(--r); border:1px solid var(--border); background:var(--bg-2); color:var(--text-2); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; line-height:1; }
+.modal-close:hover { background:var(--bg-3); color:var(--text); }
+.modal-body { overflow-y:auto; padding:20px 24px; flex:1; }
+.modal-footer { padding:12px 18px; border-top:1px solid var(--border); background:var(--bg-2); border-radius:0 0 var(--r-xl) var(--r-xl); flex-shrink:0; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+
+/* ── Arbre visuel talents ── */
+.tal-trees-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media(max-width:700px){ .tal-trees-grid{ grid-template-columns:1fr; } }
+
+/* Conteneur d'un arbre racine */
+.tal-tree-wrap { display:flex; flex-direction:column; gap:0; }
+
+/* Étiquette de l'arbre racine */
+.tal-tree-label {
+  font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.07em;
+  color:var(--text-3); margin-bottom:10px; display:flex; align-items:center; gap:8px;
+}
+.tal-tree-label-bar { flex:1; height:1px; background:var(--border); }
+
+/* Colonne = un niveau de l'arbre (racine | spé | sous-spé) */
+.tal-col { position:relative; }
+
+/* Ligne de connecteurs SVG entre colonnes */
+.tal-connectors { overflow:visible; display:block; width:100%; }
+
+/* Card nœud talent */
+.tal-card {
+  background:var(--bg-2);
+  border:1.5px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:10px 12px;
+  position:relative;
+  transition:border-color .15s, box-shadow .15s;
+  cursor:default;
+  margin-bottom:8px;
+}
+.tal-card:last-child { margin-bottom:0; }
+.tal-card.has-pts { border-color:var(--success); background:var(--success-bg); }
+.tal-card.locked { opacity:.45; }
+.tal-card.locked .tal-card-name::after { content:' 🔒'; font-size:10px; }
+.tal-card-top { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.tal-card-name { font-size:12px; font-weight:600; flex:1; line-height:1.3; color:var(--text); }
+.tal-card.has-pts .tal-card-name { color:var(--success); }
+
+/* Compteur pts */
+.tal-pts-ctrl { display:flex; align-items:center; gap:4px; flex-shrink:0; }
+.tal-pts-btn {
+  width:20px; height:20px; border-radius:4px;
+  border:1px solid var(--border); background:var(--bg);
+  color:var(--text-2); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; line-height:1; transition:all .1s;
+}
+.tal-pts-btn:hover:not(:disabled) { background:var(--bg-3); color:var(--text); }
+.tal-pts-btn:disabled { opacity:.3; cursor:not-allowed; }
+.tal-pts-val { font-family:var(--mono); font-size:12px; font-weight:700; min-width:36px; text-align:center; color:var(--text); }
+.tal-pts-max { font-size:10px; color:var(--text-3); }
+
+/* Barre de progression */
+.tal-bar { height:3px; background:var(--bg-4); border-radius:2px; margin-bottom:6px; overflow:hidden; }
+.tal-bar-fill { height:100%; background:var(--success); border-radius:2px; transition:width .25s; }
+
+/* Paliers atteints */
+.tal-paliers { display:flex; flex-direction:column; gap:2px; }
+.tal-palier-line { display:flex; align-items:baseline; gap:5px; font-size:10.5px; line-height:1.4; }
+.tal-palier-pts { font-family:var(--mono); font-weight:700; color:var(--text-3); white-space:nowrap; min-width:22px; flex-shrink:0; }
+.tal-palier-bonus { color:var(--text-3); }
+.tal-palier-line.achieved .tal-palier-pts { color:var(--success); }
+.tal-palier-line.achieved .tal-palier-bonus { color:var(--success); }
+.tal-palier-line.next .tal-palier-pts { color:var(--warning); }
+.tal-palier-line.next .tal-palier-bonus { color:var(--text-2); }
+
+/* Tooltip bonus_par_point au survol */
+.tal-card-tip {
+  position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%);
+  background:var(--primary); color:var(--primary-fg);
+  font-size:11px; line-height:1.5; padding:7px 10px;
+  border-radius:var(--r-lg); width:220px; z-index:300;
+  box-shadow:var(--shadow-md); pointer-events:none;
+  display:none; white-space:normal;
+}
+.tal-card-tip::after { content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%); border:5px solid transparent; border-top-color:var(--primary); }
+.tal-card:hover .tal-card-tip { display:block; }
+
+/* Conteneur hiérarchique : racine + ses enfants côte à côte */
+.tal-node-row { display:flex; flex-direction:column; gap:0; }
+.tal-children-block { margin-left:20px; padding-left:16px; border-left:2px solid var(--border); margin-top:4px; margin-bottom:8px; display:flex; flex-direction:column; gap:4px; }
+.tal-children-block.l3 { margin-left:12px; padding-left:12px; border-left-color:var(--bg-4); }
+
+/* Connecteur horizontal parent→enfant */
+.tal-connector-h { position:absolute; left:-16px; top:18px; width:16px; height:2px; background:var(--border); }
+
+.tal-summary { display:flex; gap:8px; flex-wrap:wrap; }
+.tal-sum-item { font-size:12px; padding:3px 8px; border-radius:20px; background:var(--bg-3); border:1px solid var(--border); color:var(--text-2); font-family:var(--mono); }
+.tal-sum-item span { color:var(--success); font-weight:600; }
+
 </style>
 </head>
 <body>
@@ -438,8 +541,37 @@ footer strong { color: var(--text-2); }
       <div class="step-body">
 
         <!-- Onglets métiers -->
-        <div style="display:flex;gap:4px;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:0;">
-          <button class="btn btn-sm" id="tab-cuisine" onclick="setMetier('cuisine')" style="border-bottom:2px solid var(--primary);border-radius:var(--r) var(--r) 0 0;margin-bottom:-1px;">🍳 Cuisine</button>
+        <div style="display:flex;gap:4px;margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:0;" id="metier-tabs">
+          <button class="btn btn-sm tab-btn" id="tab-cuisine" onclick="setMetier('cuisine')" style="border-radius:var(--r) var(--r) 0 0;margin-bottom:-1px;">🍳 Cuisine</button>
+          <button class="btn btn-sm tab-btn" id="tab-enchantement" onclick="setMetier('enchantement')" style="border-radius:var(--r) var(--r) 0 0;margin-bottom:-1px;">✨ Enchantement</button>
+        </div>
+
+
+        <!-- Bouton talents enchantement -->
+        <div id="talents-btn-wrap" style="display:none;margin-bottom:12px;">
+          <button class="btn btn-outline" onclick="openTalentsModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            Talents d'enchantement
+            <span id="talents-pts-badge" class="badge badge-info" style="font-size:10px;"></span>
+          </button>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal-overlay" id="talents-modal" onclick="handleModalClick(event)">
+          <div class="modal-box">
+            <div class="modal-hdr">
+              <div class="modal-title">✨ Talents d'enchantement</div>
+              <button class="modal-close" onclick="closeTalentsModal()">✕</button>
+            </div>
+            <div class="modal-body" id="talents-modal-body"></div>
+            <div class="modal-footer">
+              <div class="tal-summary" id="tal-summary"></div>
+              <button class="btn btn-sm btn-warn" style="margin-left:auto;" onclick="resetTalents()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5"/></svg>
+                Réinitialiser
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- Barre de recherche -->
@@ -680,6 +812,166 @@ const PRESET_RECIPES = [
     ingredients:[{item:'Ingrédient taverne',niveau:null,qty:5},{item:'Protéines végétales',niveau:null,qty:5},{item:'Presque du porc',niveau:null,qty:5},{item:'Filet thalassien',niveau:null,qty:5},{item:'Sacoche d\'épices',niveau:null,qty:5}]},
 ];
 
+
+// ══════════════════════════════════════════════
+// INGRÉDIENTS SANS QUALITÉ — ENCHANTEMENT
+// ══════════════════════════════════════════════
+const NO_QUALITY_ITEMS = new Set([
+  'particule de magie sauvage','nageoire majestueuse','racine pétrifiée',
+  'particule d\'énergie primordiale','particule de lumière','particule de vide pur',
+]);
+function ingNiveau(itemName){ return NO_QUALITY_ITEMS.has((itemName||'').toLowerCase().trim()) ? null : null; }
+// Note: niveau est null par défaut pour tous; les ingrédients avec qualité
+// seront saisis manuellement par l'utilisateur via l'import Auctionator (Niveau 1/Niveau 2)
+
+// ══════════════════════════════════════════════
+// RECETTES PRÉ-ENREGISTRÉES — ENCHANTEMENT
+// ══════════════════════════════════════════════
+const PRESET_RECIPES_ENCHANT = [
+  // — Bâtonnets & Baguettes —
+  { id:'e1',  name:'Baguette de tisse-sort thalassienne',    qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3}]},
+  { id:'e2',  name:'Bâtonnet runique en thorium éblouissant', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Vitalité fusionnée',niveau:null,qty:20},{item:'Thorium éblouissant',niveau:null,qty:3},{item:'Poussière de chant éternel',niveau:null,qty:30},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:4},{item:'Barde d\'arme de Lune-d\'Argent',niveau:null,qty:1}]},
+  { id:'e3',  name:'Bâtonnet runique en argent brillant',    qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:5},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Minerai d\'argent brillant',niveau:null,qty:5},{item:'Barde d\'arme de Lune-d\'Argent',niveau:null,qty:1}]},
+  { id:'e4',  name:'Grand canalisateur de magistère',        qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Étincelle',niveau:null,qty:2},{item:'Particule de Lumière',niveau:null,qty:10},{item:'Tantale tourmenté',niveau:null,qty:1},{item:'Éclat radieux',niveau:null,qty:20},{item:'Cristal de l\'aube',niveau:null,qty:1},{item:'Barde d\'arme de Lune-d\'Argent',niveau:null,qty:1}]},
+  // — Huiles & Consommables —
+  { id:'e5',  name:'Huile de phénix thalassienne',           qty:5, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:5},{item:'Poussière de chant éternel',niveau:null,qty:5},{item:'Fiole de verre solaire',niveau:null,qty:1}]},
+  { id:'e6',  name:'Huile de l\'aube',                      qty:5, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:5},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:5},{item:'Fiole de verre solaire',niveau:null,qty:1}]},
+  { id:'e7',  name:'Tranchant enchanté de contrebande',      qty:5, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:5},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:5},{item:'Fiole de verre solaire',niveau:null,qty:1}]},
+  // — Enchantements de bottes —
+  { id:'e8',  name:'Enchantement de bottes - chasse de pérégrin', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:10},{item:'Fourrure fantastique',niveau:null,qty:1},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3},{item:'Cristal de l\'aube',niveau:null,qty:1}]},
+  { id:'e9',  name:'Enchantement de bottes - dextérité du lynx', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:10},{item:'Canine tranchante',niveau:null,qty:1},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3},{item:'Cristal de l\'aube',niveau:null,qty:1}]},
+  { id:'e10', name:'Enchantement de bottes - racines de Shaladrassil', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:10},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:10},{item:'Éclat radieux',niveau:null,qty:5},{item:'Cristal de l\'aube',niveau:null,qty:1},{item:'Azeracine',niveau:null,qty:20}]},
+  // — Enchantements de casque/heaume —
+  { id:'e11', name:'Enchantement de casque - maléfice de sangsue', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3}]},
+  { id:'e12', name:'Enchantement de casque - maléfice de sangsue renforcé', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:20},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2}]},
+  { id:'e13', name:'Enchantement de casque - rune d\'évitement', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3}]},
+  { id:'e14', name:'Enchantement de casque - rune d\'évitement renforcée', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:20},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2}]},
+  { id:'e15', name:'Enchantement de heaume - bénédiction de vitesse', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3}]},
+  { id:'e16', name:'Enchantement de heaume - bénédiction de vitesse renforcée', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:20},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2}]},
+  // — Enchantements de plastron —
+  { id:'e17', name:'Enchantement de plastron - marque de garde-racines', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:5},{item:'Nageoire majestueuse',niveau:null,qty:1},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2}]},
+  { id:'e18', name:'Enchantement de plastron - marque de l\'Âme-monde', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:5},{item:'Peau majestueuse',niveau:null,qty:1},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2}]},
+  { id:'e19', name:'Enchantement de plastron - marque de magistère', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:5},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Rouleau de tisse-arcane',niveau:null,qty:2}]},
+  { id:'e20', name:'Enchantement de plastron - marque de Nalorakk', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:5},{item:'Griffe majestueuse',niveau:null,qty:1},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2}]},
+  // — Enchantements d'anneau —
+  { id:'e21', name:'Enchantement d\'anneau - courroux de la nature', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:5}]},
+  { id:'e22', name:'Enchantement d\'anneau - empressement de Lune-d\'Argent', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:15},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3},{item:'Cristal de l\'aube',niveau:null,qty:1}]},
+  { id:'e23', name:'Enchantement d\'anneau - fureur de la nature', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:15},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3},{item:'Cristal de l\'aube',niveau:null,qty:1}]},
+  { id:'e24', name:'Enchantement d\'anneau - hâte thalassienne', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:5}]},
+  { id:'e25', name:'Enchantement d\'anneau - maîtrise amani', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:5}]},
+  { id:'e26', name:'Enchantement d\'anneau - maîtrise de Zul\'jin', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:15},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3},{item:'Cristal de l\'aube',niveau:null,qty:1}]},
+  { id:'e27', name:'Enchantement d\'anneau - polyvalence thalassienne', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:5}]},
+  { id:'e28', name:'Enchantement d\'anneau - ténacité de Lune-d\'Argent', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:15},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3},{item:'Cristal de l\'aube',niveau:null,qty:1}]},
+  { id:'e29', name:'Enchantement d\'anneau - yeux de l\'aigle', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:15},{item:'Plumage incomparable',niveau:null,qty:2},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3},{item:'Cristal de l\'aube',niveau:null,qty:1}]},
+  // — Enchantements d'arme —
+  { id:'e30', name:'Enchantement d\'arme - acuité des Ren\'dorei', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Vide pur',niveau:null,qty:5},{item:'Racine pétrifiée',niveau:null,qty:4},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:3},{item:'Améthyste ténébreuse sans défaut',niveau:null,qty:1}]},
+  { id:'e31', name:'Enchantement d\'arme - berceau d\'Âme-monde', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:5},{item:'Racine pétrifiée',niveau:null,qty:4},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Olivine d\'Harandar sans défaut',niveau:null,qty:1}]},
+  { id:'e32', name:'Enchantement d\'arme - égide d\'Âme-monde', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:5},{item:'Racine pétrifiée',niveau:null,qty:4},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Olivine d\'Harandar sans défaut',niveau:null,qty:1}]},
+  { id:'e33', name:'Enchantement d\'arme - flammes des Sin\'dorei', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:5},{item:'Racine pétrifiée',niveau:null,qty:4},{item:'Poussière de chant éternel',niveau:null,qty:25},{item:'Éclat radieux',niveau:null,qty:15},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Rouleau de soie du feu solaire',niveau:null,qty:2}]},
+  { id:'e34', name:'Enchantement d\'arme - force d\'Halazzi', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:5},{item:'Griffe majestueuse',niveau:null,qty:1},{item:'Racine pétrifiée',niveau:null,qty:4},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:5},{item:'Cristal de l\'aube',niveau:null,qty:2}]},
+  { id:'e35', name:'Enchantement d\'arme - maîtrise des arcanes', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:5},{item:'Racine pétrifiée',niveau:null,qty:4},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:15},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Rouleau de tisse-arcane',niveau:null,qty:2}]},
+  { id:'e36', name:'Enchantement d\'arme - précision de Jan\'alai', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:5},{item:'Nageoire majestueuse',niveau:null,qty:1},{item:'Racine pétrifiée',niveau:null,qty:4},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:5},{item:'Cristal de l\'aube',niveau:null,qty:2}]},
+  { id:'e37', name:'Enchantement d\'arme - rage du berserker', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:5},{item:'Racine pétrifiée',niveau:null,qty:4},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Lapis amani sans défaut',niveau:null,qty:1}]},
+  { id:'e38', name:'Enchantement d\'arme - ténacité d\'Âme-monde', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:5},{item:'Racine pétrifiée',niveau:null,qty:4},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Olivine d\'Harandar sans défaut',niveau:null,qty:1}]},
+  // — Enchantements d'épaulières —
+  { id:'e39', name:'Enchantement d\'épaulières - Grâce d\'Amirdrassil', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:20},{item:'Racine pétrifiée',niveau:null,qty:2},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2}]},
+  { id:'e40', name:'Enchantement d\'épaulières - Grâce de la nature', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3}]},
+  { id:'e41', name:'Enchantement d\'épaulières - Guérison de Lune-d\'Argent', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:20},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2}]},
+  { id:'e42', name:'Enchantement d\'épaulières - Rapidité d\'Akil\'zon', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:20},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2}]},
+  { id:'e43', name:'Enchantement d\'épaulières - Récupération thalassienne', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3}]},
+  { id:'e44', name:'Enchantement d\'épaulières - Vol de l\'aigle', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Poussière de chant éternel',niveau:null,qty:15},{item:'Éclat radieux',niveau:null,qty:3}]},
+  // — Enchantements d'outil —
+  { id:'e45', name:'Enchantement d\'outil - adresse des Sin\'dorei', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:20},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Alliage en argent',niveau:null,qty:5}]},
+  { id:'e46', name:'Enchantement d\'outil - fabrication multiple haranir', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:20},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Alliage en argent',niveau:null,qty:5}]},
+  { id:'e47', name:'Enchantement d\'outil - finesse haranir', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:20},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Lingot de cuivre éclatant',niveau:null,qty:5}]},
+  { id:'e48', name:'Enchantement d\'outil - ingéniosité amani', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:20},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Lingot de cuivre éclatant',niveau:null,qty:5}]},
+  { id:'e49', name:'Enchantement d\'outil - ingéniosité ren\'dorei', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Vide pur',niveau:null,qty:20},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Alliage de la tombée du jour',niveau:null,qty:5}]},
+  { id:'e50', name:'Enchantement d\'outil - perception amani', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:20},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:2},{item:'Lingot de cuivre éclatant',niveau:null,qty:5}]},
+  // — Parures illusoires —
+  { id:'e51', name:'Parure illusoire - étreinte de la nature', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:1},{item:'Vélin d\'enchantement',niveau:null,qty:1},{item:'Poussière de chant éternel',niveau:null,qty:2}]},
+  { id:'e52', name:'Parure illusoire - lumière de floraison', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:1},{item:'Vélin d\'enchantement',niveau:null,qty:1},{item:'Poussière de chant éternel',niveau:null,qty:2}]},
+  { id:'e53', name:'Parure illusoire - touchée par le Vide', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Vide pur',niveau:null,qty:1},{item:'Vélin d\'enchantement',niveau:null,qty:1},{item:'Poussière de chant éternel',niveau:null,qty:2}]},
+  // — Divers —
+  { id:'e54', name:'Balai ensorcelé',                        qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Fil en feuillargent',niveau:null,qty:50},{item:'Bois thalassien',niveau:null,qty:22},{item:'Poussière de chant éternel',niveau:null,qty:30},{item:'Éclat radieux',niveau:null,qty:5},{item:'Cristal de l\'aube',niveau:null,qty:5}]},
+  { id:'e55', name:'Codex sans fin de grâce de la nature',   qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Bois thalassien',niveau:null,qty:50},{item:'Particule de magie sauvage',niveau:null,qty:20},{item:'Vélin de lexicologue',niveau:null,qty:50},{item:'Poussière de chant éternel',niveau:null,qty:50},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:3},{item:'Encre de Sienne',niveau:null,qty:2}]},
+  { id:'e56', name:'Codex sans fin de lumière de floraison', qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Bois thalassien',niveau:null,qty:50},{item:'Particule de Lumière',niveau:null,qty:20},{item:'Vélin de lexicologue',niveau:null,qty:50},{item:'Poussière de chant éternel',niveau:null,qty:50},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:3},{item:'Encre de Sienne',niveau:null,qty:2}]},
+  { id:'e57', name:'Codex sans fin touché par le Vide',      qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Bois thalassien',niveau:null,qty:50},{item:'Particule de Vide pur',niveau:null,qty:20},{item:'Vélin de lexicologue',niveau:null,qty:50},{item:'Poussière de chant éternel',niveau:null,qty:50},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:3},{item:'Encre de Munsell',niveau:null,qty:2}]},
+  { id:'e58', name:'Dépôt postal ren\'dorei',               qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Vide pur',niveau:null,qty:10},{item:'Vélin de lexicologue',niveau:null,qty:20},{item:'Bois thalassien',niveau:null,qty:18},{item:'Éclat radieux',niveau:null,qty:15},{item:'Cristal de l\'aube',niveau:null,qty:5},{item:'Pierre voile-de-brune',niveau:null,qty:5}]},
+  { id:'e59', name:'Feu de camp de flambe-racine',           qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule d\'énergie primordiale',niveau:null,qty:10},{item:'Bois thalassien',niveau:null,qty:32},{item:'Éclat radieux',niveau:null,qty:15},{item:'Cristal de l\'aube',niveau:null,qty:5},{item:'Azeracine',niveau:null,qty:10}]},
+  { id:'e60', name:'Marteau sin\'dorei animé',              qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Flux de luminance',niveau:null,qty:10},{item:'Bois thalassien',niveau:null,qty:14},{item:'Éclat radieux',niveau:null,qty:15},{item:'Cristal de l\'aube',niveau:null,qty:5},{item:'Alliage en argent',niveau:null,qty:10}]},
+  { id:'e61', name:'Pioche sin\'dorei animée',              qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Flux de luminance',niveau:null,qty:10},{item:'Bois thalassien',niveau:null,qty:14},{item:'Éclat radieux',niveau:null,qty:15},{item:'Cristal de l\'aube',niveau:null,qty:5},{item:'Alliage en argent',niveau:null,qty:10}]},
+  { id:'e62', name:'Solvin thalassien en libre-service',     qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Bois thalassien',niveau:null,qty:18},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:5},{item:'Verre cristallin',niveau:null,qty:5}]},
+  { id:'e63', name:'Source d\'eau scintillante',            qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de magie sauvage',niveau:null,qty:10},{item:'Eau chantante thalassienne',niveau:null,qty:10},{item:'Bois thalassien',niveau:null,qty:14},{item:'Poussière de chant éternel',niveau:null,qty:30},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:3},{item:'Pierre voile-de-brune',niveau:null,qty:5}]},
+  { id:'e64', name:'Tome envoûté de magie thalassienne',     qty:1, metier:'enchantement', prodNiveau:null,
+    ingredients:[{item:'Particule de Lumière',niveau:null,qty:10},{item:'Vélin de lexicologue',niveau:null,qty:20},{item:'Bois thalassien',niveau:null,qty:20},{item:'Poussière de chant éternel',niveau:null,qty:20},{item:'Éclat radieux',niveau:null,qty:10},{item:'Cristal de l\'aube',niveau:null,qty:3}]},
+];
+
+// Tableau unifié toutes recettes
+const PRESET_RECIPES_ALL = [...PRESET_RECIPES, ...PRESET_RECIPES_ENCHANT];
+
 // ══════════════════════════════════════════════
 // DEFAULTS MARCHANDS
 // ══════════════════════════════════════════════
@@ -691,6 +983,8 @@ const DEFAULTS = [
   {name:'Herbes Thalassiennes',          g:0,s:12,c:25},
   {name:'Essence de wyrm de mana',       g:0,s:7, c:70},
   {name:'Sacoche d\'épices',             g:0,s:10,c:75},
+  {name:'Vélin d\'enchantement',         g:0,s:10,c:0 },
+  {name:'Fiole de verre solaire',        g:2,s:75,c:0 },
 ];
 
 // ══════════════════════════════════════════════
@@ -861,10 +1155,10 @@ function renderPreview(){
 // MARCHANDS
 // ══════════════════════════════════════════════
 function loadMerchants(){
-  try{const s=localStorage.getItem('pf_merch_v3');if(s){merchants=JSON.parse(s);return;}}catch(e){}
+  try{const s=localStorage.getItem('pf_merch_v4');if(s){merchants=JSON.parse(s);return;}}catch(e){}
   merchants=DEFAULTS.map((d,i)=>({id:Date.now()+i,name:d.name,g:d.g,s:d.s,c:d.c}));
 }
-function saveMerchants(){try{localStorage.setItem('pf_merch_v3',JSON.stringify(merchants));}catch(e){}}
+function saveMerchants(){try{localStorage.setItem('pf_merch_v4',JSON.stringify(merchants));}catch(e){}}
 function addMerchant(){merchants.push({id:Date.now(),name:'',g:0,s:0,c:0});saveMerchants();renderMerchants();}
 function removeMerchant(id){merchants=merchants.filter(m=>m.id!==id);saveMerchants();renderMerchants();}
 function upMerchName(id,v){const m=merchants.find(m=>m.id===id);if(m)m.name=v;saveMerchants();}
@@ -913,7 +1207,15 @@ function toggleCustomPanel(){
 // ══════════════════════════════════════════════
 // RECETTES GRILLE (cartes cliquables)
 // ══════════════════════════════════════════════
-function setMetier(m){ currentMetier=m; renderRecipeGrid(); }
+function setMetier(m){
+  currentMetier=m;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.style.borderBottom='');
+  const tab=document.getElementById('tab-'+m);
+  if(tab)tab.style.borderBottom='2px solid var(--primary)';
+  const tBtn=document.getElementById('talents-btn-wrap');
+  if(tBtn)tBtn.style.display=m==='enchantement'?'block':'none';
+  renderRecipeGrid();
+}
 
 function filterRecipes(){
   renderRecipeGrid();
@@ -924,7 +1226,7 @@ function renderRecipeGrid(){
   const search=(document.getElementById('recipe-search')?.value||'').toLowerCase().trim();
   const a=allComps();
 
-  const filtered=PRESET_RECIPES.filter(r=>{
+  const filtered=PRESET_RECIPES_ALL.filter(r=>{
     if(r.metier!==currentMetier)return false;
     if(search&&!r.name.toLowerCase().includes(search))return false;
     return true;
@@ -965,17 +1267,17 @@ function togglePreset(id){
   renderRecipeGrid();
 }
 function selectAllRecipes(){
-  PRESET_RECIPES.filter(r=>r.metier===currentMetier).forEach(r=>selectedPresets.add(r.id));
+  PRESET_RECIPES_ALL.filter(r=>r.metier===currentMetier).forEach(r=>selectedPresets.add(r.id));
   saveSelectedPresets();renderRecipeGrid();
 }
 function deselectAllRecipes(){
-  PRESET_RECIPES.filter(r=>r.metier===currentMetier).forEach(r=>selectedPresets.delete(r.id));
+  PRESET_RECIPES_ALL.filter(r=>r.metier===currentMetier).forEach(r=>selectedPresets.delete(r.id));
   saveSelectedPresets();renderRecipeGrid();
 }
 function updateSelCount(){
   const el=document.getElementById('sel-count');if(!el)return;
-  const n=PRESET_RECIPES.filter(r=>r.metier===currentMetier&&selectedPresets.has(r.id)).length;
-  const total=PRESET_RECIPES.filter(r=>r.metier===currentMetier).length;
+  const n=PRESET_RECIPES_ALL.filter(r=>r.metier===currentMetier&&selectedPresets.has(r.id)).length;
+  const total=PRESET_RECIPES_ALL.filter(r=>r.metier===currentMetier).length;
   el.textContent=`${n} / ${total} sélectionné${n>1?'s':''}`;
 }
 function saveSelectedPresets(){
@@ -1124,7 +1426,7 @@ function calcResults(){
   const rfCostMult=1-((resourcefulness/100)*0.15);
 
   // Fusionner recettes pré-enregistrées sélectionnées + recettes custom
-  const activePresets=PRESET_RECIPES.filter(r=>selectedPresets.has(r.id));
+  const activePresets=PRESET_RECIPES_ALL.filter(r=>selectedPresets.has(r.id));
   const allRecipes=[...activePresets, ...recipes.filter(r=>r.name)];
 
   allRecipes.forEach(r=>{
@@ -1155,7 +1457,7 @@ function calcResults(){
     const profit=sellNetAdj-cpu;
     const margin=cpu>0?(profit/cpu)*100:0;
     const profitBase=Math.round(sellNetBase-Math.round(costBase/qty));
-    res.push({name:r.name,prodNiveau:r.prodNiveau,sellCopper:pe.copper,sellNetBase,sellNetAdj,cpu,costBase:Math.round(costBase/qty),profit,profitBase,margin,missing,det,qty,mcMult,rfCostMult,isPreset:!!r.id?.toString().startsWith('p')});
+    res.push({name:r.name,prodNiveau:r.prodNiveau,sellCopper:pe.copper,sellNetBase,sellNetAdj,cpu,costBase:Math.round(costBase/qty),profit,profitBase,margin,missing,det,qty,mcMult,rfCostMult,isPreset:!!(r.id?.toString().startsWith('p')||r.id?.toString().startsWith('e'))});
   });
 
   if(sortBy==='profit')res.sort((a,b)=>b.profit-a.profit);
@@ -1224,10 +1526,802 @@ function calcResults(){
 
 function setSort(s){sortBy=s;document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));document.getElementById('sort-'+s).classList.add('active');calcResults();}
 
+
+// ══════════════════════════════════════════════
+// TALENTS ENCHANTEMENT
+// ══════════════════════════════════════════════
+const TALENTS_DATA = {
+  "metier": "enchantement",
+  "version": "1.0",
+  "arbres": [
+    {
+      "id": "amelioration_equipement",
+      "nom": "Amélioration de l'équipement",
+      "type": "racine",
+      "deblocage_requis": "compétence 25",
+      "max": 30,
+      "bonus_par_point": "+1 Compétence",
+      "paliers": [
+        { "pts": 0,  "bonus": "+5 Compétence (tous enchantements permanents)" },
+        { "pts": 5,  "bonus": "Déverrouille une sous-spécialisation au choix" },
+        { "pts": 10, "bonus": "+5 Compétence (tous enchantements permanents)" },
+        { "pts": 15, "bonus": "Déverrouille une deuxième sous-spécialisation au choix" },
+        { "pts": 20, "bonus": "+10 Compétence (tous enchantements permanents)" },
+        { "pts": 25, "bonus": "Déverrouille la dernière sous-spécialisation" },
+        { "pts": 30, "bonus": [
+          "+10 Vitesse d'artisanat (enchantements permanents)",
+          "+15 Inventivité et Ingéniosité (enchantements permanents)"
+        ]}
+      ],
+      "enfants": [
+        {
+          "id": "talents_thalassiens",
+          "nom": "Talents thalassiens",
+          "type": "sous-spécialisation",
+          "parent": "amelioration_equipement",
+          "deblocage_requis": "5/15/25 pts en Amélioration de l'équipement (ordre au choix)",
+          "max": 20,
+          "bonus_par_point": "+1 Compétence (enchantements thalassiens)",
+          "paliers": [
+            { "pts": 0,  "bonus": [
+              "+5 Compétence (enchantements thalassiens)",
+              "Apprend à utiliser des composants de finition sur les enchantements thalassiens"
+            ]},
+            { "pts": 5,  "bonus": "+5 Inventivité (enchantements thalassiens)" },
+            { "pts": 10, "bonus": [
+              "+5 Compétence (enchantements thalassiens)",
+              "Déverrouille une sous-spécialisation au choix"
+            ]},
+            { "pts": 15, "bonus": [
+              "+15 Ingéniosité (enchantements thalassiens)",
+              "Déverrouille une deuxième sous-spécialisation au choix"
+            ]},
+            { "pts": 20, "bonus": [
+              "+10 Compétence (enchantements thalassiens)",
+              "Déverrouille la dernière sous-spécialisation"
+            ]}
+          ],
+          "enfants": [
+            {
+              "id": "sorcellerie_lune_argent",
+              "nom": "Sorcellerie de Lune-d'Argent",
+              "type": "sous-spécialisation",
+              "parent": "talents_thalassiens",
+              "deblocage_requis": "10/15/20 pts en Talents thalassiens (ordre au choix)",
+              "max": 20,
+              "bonus_par_point": "+1 Compétence (enchantements d'armes, torse, anneaux thalassiens)",
+              "paliers": [
+                { "pts": 0,  "bonus": "Apprend la recette : Enchantement d'anneau — empressement de Lune-d'Argent" },
+                { "pts": 5,  "bonus": "+5 Compétence (enchantements d'armes, torse, anneaux thalassiens)" },
+                { "pts": 10, "bonus": "+5 Compétence (enchantements d'armes, torse, anneaux thalassiens)" },
+                { "pts": 15, "bonus": "+10 Compétence (enchantements d'armes, torse, anneaux thalassiens)" },
+                { "pts": 20, "bonus": [
+                  "+20 Compétence (enchantements d'armes, torse, anneaux thalassiens)",
+                  "-5% consommation de concentration (enchantements d'armes, torse, anneaux thalassiens)"
+                ]}
+              ]
+            },
+            {
+              "id": "renforcements_chants_eternels",
+              "nom": "Renforcements des Chants éternels",
+              "type": "sous-spécialisation",
+              "parent": "talents_thalassiens",
+              "deblocage_requis": "10/15/20 pts en Talents thalassiens (ordre au choix)",
+              "max": 20,
+              "bonus_par_point": "+1 Compétence (enchantements d'épaulières, bottes, casques thalassiens)",
+              "paliers": [
+                { "pts": 0,  "bonus": "Apprend la recette : Enchantement d'épaulières — Guérison de Lune-d'Argent" },
+                { "pts": 5,  "bonus": "+5 Compétence (enchantements d'épaulières, bottes, casques thalassiens)" },
+                { "pts": 10, "bonus": "+5 Compétence (enchantements d'épaulières, bottes, casques thalassiens)" },
+                { "pts": 15, "bonus": "+10 Compétence (enchantements d'épaulières, bottes, casques thalassiens)" },
+                { "pts": 20, "bonus": [
+                  "+20 Compétence (enchantements d'épaulières, bottes, casques thalassiens)",
+                  "-5% consommation de concentration (enchantements d'épaulières, bottes, casques thalassiens)"
+                ]}
+              ]
+            },
+            {
+              "id": "qualite_quelthalas",
+              "nom": "Qualité de Quel'Thalas",
+              "type": "sous-spécialisation",
+              "parent": "talents_thalassiens",
+              "deblocage_requis": "10/15/20 pts en Talents thalassiens (ordre au choix)",
+              "max": 20,
+              "bonus_par_point": "+1 Compétence (enchantements d'outils de métier thalassiens)",
+              "paliers": [
+                { "pts": 0,  "bonus": "Apprend la recette : Enchantement d'outil — adresse des Sin'dorei" },
+                { "pts": 5,  "bonus": "+5 Compétence (enchantements d'outils de métier thalassiens)" },
+                { "pts": 10, "bonus": "+5 Compétence (enchantements d'outils de métier thalassiens)" },
+                { "pts": 15, "bonus": "+10 Compétence (enchantements d'outils de métier thalassiens)" },
+                { "pts": 20, "bonus": [
+                  "+20 Compétence (enchantements d'outils de métier thalassiens)",
+                  "-5% consommation de concentration (enchantements d'outils de métier thalassiens)"
+                ]}
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ameliorations_amani",
+          "nom": "Améliorations amani",
+          "type": "sous-spécialisation",
+          "parent": "amelioration_equipement",
+          "deblocage_requis": "5/15/25 pts en Amélioration de l'équipement (ordre au choix)",
+          "max": 20,
+          "bonus_par_point": "+1 Compétence (enchantements amani)",
+          "paliers": [
+            { "pts": 0,  "bonus": [
+              "+5 Compétence (enchantements amani)",
+              "Apprend à utiliser des composants de finition sur les enchantements amani"
+            ]},
+            { "pts": 5,  "bonus": "+5 Inventivité (enchantements amani)" },
+            { "pts": 10, "bonus": [
+              "+5 Compétence (enchantements amani)",
+              "Déverrouille une sous-spécialisation au choix"
+            ]},
+            { "pts": 15, "bonus": [
+              "+15 Ingéniosité (enchantements amani)",
+              "Déverrouille une deuxième sous-spécialisation au choix"
+            ]},
+            { "pts": 20, "bonus": [
+              "+10 Compétence (enchantements amani)",
+              "Déverrouille la dernière sous-spécialisation"
+            ]}
+          ],
+          "enfants": [
+            {
+              "id": "zele_zulaman",
+              "nom": "Zèle de Zul'Aman",
+              "type": "sous-spécialisation",
+              "parent": "ameliorations_amani",
+              "deblocage_requis": "10/15/20 pts en Améliorations amani (ordre au choix)",
+              "max": 20,
+              "bonus_par_point": "+1 Compétence (enchantements d'armes, torse, anneaux amani)",
+              "paliers": [
+                { "pts": 0,  "bonus": "Apprend la recette : Enchantement d'anneau — maîtrise de Zul'jin" },
+                { "pts": 5,  "bonus": "+5 Compétence (enchantements d'armes, torse, anneaux amani)" },
+                { "pts": 10, "bonus": "+5 Compétence (enchantements d'armes, torse, anneaux amani)" },
+                { "pts": 15, "bonus": "+10 Compétence (enchantements d'armes, torse, anneaux amani)" },
+                { "pts": 20, "bonus": [
+                  "+20 Compétence (enchantements d'armes, torse, anneaux amani)",
+                  "-5% consommation de concentration (enchantements d'armes, torse, anneaux amani)"
+                ]}
+              ]
+            },
+            {
+              "id": "vigueur_berserker",
+              "nom": "Vigueur de berserker",
+              "type": "sous-spécialisation",
+              "parent": "ameliorations_amani",
+              "deblocage_requis": "10/15/20 pts en Améliorations amani (ordre au choix)",
+              "max": 20,
+              "bonus_par_point": "+1 Compétence (enchantements d'épaulières, bottes, casques amani)",
+              "paliers": [
+                { "pts": 0,  "bonus": "Apprend la recette : Enchantement de bottes — dextérité du lynx" },
+                { "pts": 5,  "bonus": "+5 Compétence (enchantements d'épaulières, bottes, casques amani)" },
+                { "pts": 10, "bonus": "+5 Compétence (enchantements d'épaulières, bottes, casques amani)" },
+                { "pts": 15, "bonus": "+10 Compétence (enchantements d'épaulières, bottes, casques amani)" },
+                { "pts": 20, "bonus": [
+                  "+20 Compétence (enchantements d'épaulières, bottes, casques amani)",
+                  "-5% consommation de concentration (enchantements d'épaulières, bottes, casques amani)"
+                ]}
+              ]
+            },
+            {
+              "id": "outils_trolls",
+              "nom": "Outils trolls",
+              "type": "sous-spécialisation",
+              "parent": "ameliorations_amani",
+              "deblocage_requis": "10/15/20 pts en Améliorations amani (ordre au choix)",
+              "max": 20,
+              "bonus_par_point": "+1 Compétence (enchantements d'outils de métier amani)",
+              "paliers": [
+                { "pts": 0,  "bonus": "Apprend la recette : Enchantement d'outil — ingéniosité amani" },
+                { "pts": 5,  "bonus": "+5 Compétence (enchantements d'outils de métier amani)" },
+                { "pts": 10, "bonus": "+5 Compétence (enchantements d'outils de métier amani)" },
+                { "pts": 15, "bonus": "+10 Compétence (enchantements d'outils de métier amani)" },
+                { "pts": 20, "bonus": [
+                  "+20 Compétence (enchantements d'outils de métier amani)",
+                  "-5% consommation de concentration (enchantements d'outils de métier amani)"
+                ]}
+              ]
+            }
+          ]
+        },
+        {
+          "id": "accroissement_haranir",
+          "nom": "Accroissement haranir",
+          "type": "sous-spécialisation",
+          "parent": "amelioration_equipement",
+          "deblocage_requis": "5/15/25 pts en Amélioration de l'équipement (ordre au choix)",
+          "max": 20,
+          "bonus_par_point": "+1 Compétence (enchantements haranir)",
+          "paliers": [
+            { "pts": 0,  "bonus": [
+              "+5 Compétence (enchantements haranir)",
+              "Apprend à utiliser des composants de finition sur les enchantements haranir"
+            ]},
+            { "pts": 5,  "bonus": "+5 Inventivité (enchantements haranir)" },
+            { "pts": 10, "bonus": [
+              "+5 Compétence (enchantements haranir)",
+              "Déverrouille une sous-spécialisation au choix"
+            ]},
+            { "pts": 15, "bonus": [
+              "+15 Ingéniosité (enchantements haranir)",
+              "Déverrouille une deuxième sous-spécialisation au choix"
+            ]},
+            { "pts": 20, "bonus": [
+              "+10 Compétence (enchantements haranir)",
+              "Déverrouille la dernière sous-spécialisation"
+            ]}
+          ],
+          "enfants": [
+            {
+              "id": "armement_azeroth",
+              "nom": "Armement d'Azeroth",
+              "type": "sous-spécialisation",
+              "parent": "accroissement_haranir",
+              "deblocage_requis": "10/15/20 pts en Accroissement haranir (ordre au choix)",
+              "max": 20,
+              "bonus_par_point": "+1 Compétence (enchantements d'armes, torse, anneaux haranir)",
+              "paliers": [
+                { "pts": 0,  "bonus": "Apprend la recette : Enchantement de plastron — marque de l'Âme-monde" },
+                { "pts": 5,  "bonus": "+5 Compétence (enchantements d'armes, torse, anneaux haranir)" },
+                { "pts": 10, "bonus": "+5 Compétence (enchantements d'armes, torse, anneaux haranir)" },
+                { "pts": 15, "bonus": "+10 Compétence (enchantements d'armes, torse, anneaux haranir)" },
+                { "pts": 20, "bonus": [
+                  "+20 Compétence (enchantements d'armes, torse, anneaux haranir)",
+                  "-5% consommation de concentration (enchantements d'armes, torse, anneaux haranir)"
+                ]}
+              ]
+            },
+            {
+              "id": "protection_ame_monde",
+              "nom": "Protection de l'Âme-monde",
+              "type": "sous-spécialisation",
+              "parent": "accroissement_haranir",
+              "deblocage_requis": "10/15/20 pts en Accroissement haranir (ordre au choix)",
+              "max": 20,
+              "bonus_par_point": "+1 Compétence (enchantements d'épaulières, bottes, casques haranir)",
+              "paliers": [
+                { "pts": 0,  "bonus": "Apprend la recette : Enchantement de heaume — bénédiction de vitesse renforcée" },
+                { "pts": 5,  "bonus": "+5 Compétence (enchantements d'épaulières, bottes, casques haranir)" },
+                { "pts": 10, "bonus": "+5 Compétence (enchantements d'épaulières, bottes, casques haranir)" },
+                { "pts": 15, "bonus": "+10 Compétence (enchantements d'épaulières, bottes, casques haranir)" },
+                { "pts": 20, "bonus": [
+                  "+20 Compétence (enchantements d'épaulières, bottes, casques haranir)",
+                  "-5% consommation de concentration (enchantements d'épaulières, bottes, casques haranir)"
+                ]}
+              ]
+            },
+            {
+              "id": "novation_nature",
+              "nom": "Novation de la nature",
+              "type": "sous-spécialisation",
+              "parent": "accroissement_haranir",
+              "deblocage_requis": "10/15/20 pts en Accroissement haranir (ordre au choix)",
+              "max": 20,
+              "bonus_par_point": "+1 Compétence (enchantements d'outils de métier haranir)",
+              "paliers": [
+                { "pts": 0,  "bonus": "Apprend la recette : Enchantement d'outil — finesse haranir" },
+                { "pts": 5,  "bonus": "+5 Compétence (enchantements d'outils de métier haranir)" },
+                { "pts": 10, "bonus": "+5 Compétence (enchantements d'outils de métier haranir)" },
+                { "pts": 15, "bonus": "+10 Compétence (enchantements d'outils de métier haranir)" },
+                { "pts": 20, "bonus": [
+                  "+20 Compétence (enchantements d'outils de métier haranir)",
+                  "-5% consommation de concentration (enchantements d'outils de métier haranir)"
+                ]}
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ephemeres_toniques_outils",
+      "nom": "Éphémères, toniques et outils",
+      "type": "racine",
+      "deblocage_requis": "compétence 50",
+      "max": 30,
+      "bonus_par_point": "+1 Compétence",
+      "paliers": [
+        { "pts": 0,  "bonus": "+5 Compétence (éphémères, toniques et outils)" },
+        { "pts": 5,  "bonus": "Déverrouille une sous-spécialisation au choix" },
+        { "pts": 10, "bonus": "+5 Compétence (éphémères, toniques et outils)" },
+        { "pts": 15, "bonus": "Déverrouille une deuxième sous-spécialisation au choix" },
+        { "pts": 20, "bonus": "+10 Compétence (éphémères, toniques et outils)" },
+        { "pts": 25, "bonus": "Déverrouille la dernière sous-spécialisation" },
+        { "pts": 30, "bonus": [
+          "+10% Vitesse d'artisanat (éphémères, toniques et outils)",
+          "+15 Inventivité et Ingéniosité (éphémères, toniques et outils)"
+        ]}
+      ],
+      "enfants": [
+        {
+          "id": "maitrise_mirages",
+          "nom": "Maîtrise des mirages",
+          "type": "sous-spécialisation",
+          "parent": "ephemeres_toniques_outils",
+          "deblocage_requis": "5/15/25 pts en Éphémères, toniques et outils (ordre au choix)",
+          "max": 20,
+          "bonus_par_point": "+1 Compétence (illusions temporaires)",
+          "paliers": [
+            { "pts": 0,  "bonus": [
+              "+5 Compétence (illusions temporaires)",
+              "Apprend à utiliser des composants de finition sur les illusions temporaires"
+            ]},
+            { "pts": 5,  "bonus": "+5 Ingéniosité (illusions temporaires)" },
+            { "pts": 10, "bonus": "+5 Compétence (illusions temporaires)" },
+            { "pts": 15, "bonus": "+10 Ingéniosité (illusions temporaires)" },
+            { "pts": 20, "bonus": [
+              "+20 Compétence (illusions temporaires)",
+              "-5% consommation de concentration (illusions temporaires)"
+            ]}
+          ]
+        },
+        {
+          "id": "tenues_etonnantes",
+          "nom": "Tenues étonnantes",
+          "type": "sous-spécialisation",
+          "parent": "ephemeres_toniques_outils",
+          "deblocage_requis": "5/15/25 pts en Éphémères, toniques et outils (ordre au choix)",
+          "max": 20,
+          "bonus_par_point": "+1 Compétence (fabrication d'équipements)",
+          "paliers": [
+            { "pts": 0,  "bonus": [
+              "+5 Compétence (fabrication d'équipements)",
+              "Apprend à utiliser des composants de finition et optionnels (fabrication d'équipements)"
+            ]},
+            { "pts": 5,  "bonus": "+5 Inventivité (fabrication d'équipements)" },
+            { "pts": 10, "bonus": [
+              "+5 Compétence (fabrication d'équipements)",
+              "Déverrouille une sous-spécialisation au choix (baguettes ou bâtonnets)"
+            ]},
+            { "pts": 15, "bonus": "+15 Ingéniosité (fabrication d'équipements)" },
+            { "pts": 20, "bonus": [
+              "+10 Compétence (fabrication d'équipements)",
+              "Déverrouille la dernière sous-spécialisation"
+            ]}
+          ],
+          "enfants": [
+            {
+              "id": "batonnets_renommes",
+              "nom": "Bâtonnets renommés",
+              "type": "sous-spécialisation",
+              "parent": "tenues_etonnantes",
+              "deblocage_requis": "10/20 pts en Tenues étonnantes (ordre au choix)",
+              "max": 20,
+              "bonus_par_point": "+1 Compétence (fabrication de bâtonnets d'enchantement)",
+              "paliers": [
+                { "pts": 0,  "bonus": "Apprend la recette : Bâtonnet runique en argent brillant" },
+                { "pts": 5,  "bonus": "+5 Compétence (fabrication de bâtonnets d'enchantement)" },
+                { "pts": 10, "bonus": "+5 Compétence (fabrication de bâtonnets d'enchantement)" },
+                { "pts": 15, "bonus": "+10 Compétence (fabrication de bâtonnets d'enchantement)" },
+                { "pts": 20, "bonus": [
+                  "+20 Compétence (fabrication de bâtonnets d'enchantement)",
+                  "-5% consommation de concentration (fabrication de bâtonnets d'enchantement)"
+                ]}
+              ]
+            },
+            {
+              "id": "baguettes_dignes",
+              "nom": "Baguettes dignes",
+              "type": "sous-spécialisation",
+              "parent": "tenues_etonnantes",
+              "deblocage_requis": "10/20 pts en Tenues étonnantes (ordre au choix)",
+              "max": 20,
+              "bonus_par_point": "+1 Compétence (fabrication de baguettes de combat)",
+              "paliers": [
+                { "pts": 0,  "bonus": "Apprend la recette : Grand canalisateur de magistère" },
+                { "pts": 5,  "bonus": "+5 Compétence (fabrication de baguettes de combat)" },
+                { "pts": 10, "bonus": "+5 Compétence (fabrication de baguettes de combat)" },
+                { "pts": 15, "bonus": "+10 Compétence (fabrication de baguettes de combat)" },
+                { "pts": 20, "bonus": [
+                  "+20 Compétence (fabrication de baguettes de combat)",
+                  "-5% consommation de concentration (fabrication de baguettes de combat)"
+                ]}
+              ]
+            }
+          ]
+        },
+        {
+          "id": "consommables_qualite",
+          "nom": "Consommables de qualité",
+          "type": "sous-spécialisation",
+          "parent": "ephemeres_toniques_outils",
+          "deblocage_requis": "5/15/25 pts en Éphémères, toniques et outils (ordre au choix)",
+          "max": 30,
+          "bonus_par_point": "+1 Compétence (composants et huiles de mana)",
+          "paliers": [
+            { "pts": 0,  "bonus": [
+              "Apprend la recette : Huile de l'aube",
+              "+5 Compétence (fabrication de composants et d'huiles de mana)",
+              "Apprend à utiliser des composants de finition (composants et huiles de mana)"
+            ]},
+            { "pts": 5,  "bonus": "+5 Inventivité (fabrication de composants et d'huiles de mana)" },
+            { "pts": 10, "bonus": "+5 Compétence (fabrication de composants et d'huiles de mana)" },
+            { "pts": 15, "bonus": "+60 Fabrication multiple (fabrication de composants et d'huiles de mana)" },
+            { "pts": 20, "bonus": "+10 Compétence (fabrication de composants et d'huiles de mana)" },
+            { "pts": 25, "bonus": "+15 Compétence (fabrication de composants et d'huiles de mana)" },
+            { "pts": 30, "bonus": [
+              "+20 Compétence (fabrication d'huiles de mana)",
+              "-5% consommation de concentration (huiles de mana)"
+            ]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "delegation_desenchantee",
+      "nom": "Délégation désenchantée",
+      "type": "racine",
+      "deblocage_requis": "compétence 60",
+      "max": 30,
+      "bonus_par_point": "+1 Compétence (désenchantement d'équipements de Midnight)",
+      "paliers": [
+        { "pts": 0,  "bonus": "+5 Compétence (désenchantement d'équipements de Midnight)" },
+        { "pts": 5,  "bonus": "Déverrouille une sous-spécialisation au choix" },
+        { "pts": 10, "bonus": "+5 Compétence (désenchantement d'équipements de Midnight)" },
+        { "pts": 15, "bonus": "Déverrouille une deuxième sous-spécialisation au choix" },
+        { "pts": 20, "bonus": "+10 Compétence (désenchantement d'équipements de Midnight)" },
+        { "pts": 25, "bonus": "Déverrouille la dernière sous-spécialisation" },
+        { "pts": 30, "bonus": "+20 Compétence (désenchantement d'équipements peu communs de Midnight)" }
+      ],
+      "enfants": [
+        {
+          "id": "production_poussiere",
+          "nom": "Production de poussière",
+          "type": "sous-spécialisation",
+          "parent": "delegation_desenchantee",
+          "deblocage_requis": "5/15/25 pts en Délégation désenchantée (ordre au choix)",
+          "max": 30,
+          "bonus_par_point": "+1 Compétence (désenchantement d'équipements peu communs de Midnight)",
+          "paliers": [
+            { "pts": 0,  "bonus": "+5 Compétence (désenchantement d'équipements peu communs de Midnight)" },
+            { "pts": 5,  "bonus": "+5 Compétence (désenchantement d'équipements peu communs de Midnight)" },
+            { "pts": 10, "bonus": "+5 Compétence (désenchantement d'équipements peu communs de Midnight)" },
+            { "pts": 15, "bonus": "+5 Compétence (désenchantement d'équipements peu communs de Midnight)" },
+            { "pts": 20, "bonus": "Chance de créer davantage de poussière de chant éternel (désenchantement d'équipements peu communs de Midnight)" },
+            { "pts": 25, "bonus": "+10 Compétence (désenchantement d'équipements peu communs de Midnight)" },
+            { "pts": 30, "bonus": [
+              "+20 Compétence (désenchantement d'équipements peu communs de Midnight)",
+              "Chances augmentées de créer de la poussière de chant éternel supplémentaire (désenchantement d'équipements peu communs de Midnight)"
+            ]}
+          ]
+        },
+        {
+          "id": "distribution_eclats",
+          "nom": "Distribution d'éclats",
+          "type": "sous-spécialisation",
+          "parent": "delegation_desenchantee",
+          "deblocage_requis": "5/15/25 pts en Délégation désenchantée (ordre au choix)",
+          "max": 30,
+          "bonus_par_point": "+1 Compétence (désenchantement d'équipements rares de Midnight)",
+          "paliers": [
+            { "pts": 0,  "bonus": "+5 Compétence (désenchantement d'équipements rares de Midnight)" },
+            { "pts": 5,  "bonus": "+5 Compétence (désenchantement d'équipements rares de Midnight)" },
+            { "pts": 10, "bonus": "+5 Compétence (désenchantement d'équipements rares de Midnight)" },
+            { "pts": 15, "bonus": "+5 Compétence (désenchantement d'équipements rares de Midnight)" },
+            { "pts": 20, "bonus": "Chance de créer davantage d'éclats radieux (désenchantement d'équipements rares de Midnight)" },
+            { "pts": 25, "bonus": "+10 Compétence (désenchantement d'équipements rares de Midnight)" },
+            { "pts": 30, "bonus": [
+              "+20 Compétence (désenchantement d'équipements rares de Midnight)",
+              "Nouveaux paliers d'efficacité et chance de libérer des matériaux supplémentaires (désenchantement d'équipements rares de Midnight)"
+            ]}
+          ]
+        },
+        {
+          "id": "collection_cristaux",
+          "nom": "Collection de cristaux",
+          "type": "sous-spécialisation",
+          "parent": "delegation_desenchantee",
+          "deblocage_requis": "5/15/25 pts en Délégation désenchantée (ordre au choix)",
+          "max": 30,
+          "bonus_par_point": "+1 Compétence (désenchantement d'équipements épiques de Midnight)",
+          "paliers": [
+            { "pts": 0,  "bonus": "+5 Compétence (désenchantement d'équipements épiques de Midnight)" },
+            { "pts": 5,  "bonus": "+5 Compétence (désenchantement d'équipements épiques de Midnight)" },
+            { "pts": 10, "bonus": "+5 Compétence (désenchantement d'équipements épiques de Midnight)" },
+            { "pts": 15, "bonus": "+5 Compétence (désenchantement d'équipements épiques de Midnight)" },
+            { "pts": 20, "bonus": "Chance d'extraire des essences magiques de Midnight (désenchantement d'équipements épiques de Midnight)" },
+            { "pts": 25, "bonus": "+10 Compétence (désenchantement d'équipements épiques de Midnight)" },
+            { "pts": 30, "bonus": [
+              "+20 Compétence (désenchantement d'équipements épiques de Midnight)",
+              "Chances augmentées d'extraire des essences magiques de Midnight (désenchantement d'équipements épiques de Midnight)"
+            ]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fracassement_envoute",
+      "nom": "Fracassement envoûté",
+      "type": "racine",
+      "deblocage_requis": "compétence 75",
+      "max": 30,
+      "bonus_par_point": "+1 Inventivité",
+      "paliers": [
+        { "pts": 0,  "bonus": [
+          "Apprend : Fragmentation d'essence",
+          "-2% consommation de concentration (formules de Midnight)"
+        ]},
+        { "pts": 5,  "bonus": "Déverrouille une sous-spécialisation au choix" },
+        { "pts": 10, "bonus": "-3% consommation de concentration (formules de Midnight)" },
+        { "pts": 15, "bonus": [
+          "Essence fragmentée dure 5 minutes de plus",
+          "Déverrouille une deuxième sous-spécialisation au choix"
+        ]},
+        { "pts": 20, "bonus": "-5% consommation de concentration (formules de Midnight)" },
+        { "pts": 25, "bonus": "Déverrouille la dernière sous-spécialisation" },
+        { "pts": 30, "bonus": "Essence fragmentée dure 5 minutes de plus" }
+      ],
+      "enfants": [
+        {
+          "id": "ressources_responsables",
+          "nom": "Ressources responsables",
+          "type": "sous-spécialisation",
+          "parent": "fracassement_envoute",
+          "deblocage_requis": "5/15/25 pts en Fracassement envoûté (ordre au choix)",
+          "max": 30,
+          "bonus_par_point": "+1 Ingéniosité",
+          "paliers": [
+            { "pts": 0,  "bonus": "L'Ingéniosité rend +5% de matériaux supplémentaires (fabrication de formules de Midnight)" },
+            { "pts": 5,  "bonus": "+5 Ingéniosité supplémentaire sous l'effet d'Essence fragmentée" },
+            { "pts": 10, "bonus": "L'Ingéniosité rend +5% de matériaux supplémentaires (fabrication de formules de Midnight)" },
+            { "pts": 15, "bonus": "+10 Ingéniosité supplémentaire sous l'effet d'Essence fragmentée" },
+            { "pts": 20, "bonus": "L'Ingéniosité rend +5% de matériaux supplémentaires (fabrication de formules de Midnight)" },
+            { "pts": 25, "bonus": "+20 Ingéniosité supplémentaire sous l'effet d'Essence fragmentée" },
+            { "pts": 30, "bonus": "L'Ingéniosité rend +5% de matériaux supplémentaires (fabrication de formules de Midnight)" }
+          ]
+        },
+        {
+          "id": "inventivite_infinie",
+          "nom": "Inventivité infinie",
+          "type": "sous-spécialisation",
+          "parent": "fracassement_envoute",
+          "deblocage_requis": "5/15/25 pts en Fracassement envoûté (ordre au choix)",
+          "max": 30,
+          "bonus_par_point": "+1 Inventivité",
+          "paliers": [
+            { "pts": 0,  "bonus": "Les découvertes inventives restituent +5% de concentration dépensée supplémentaire (enchantements de Midnight)" },
+            { "pts": 5,  "bonus": "+5 Inventivité supplémentaire sous l'effet d'Essence fragmentée" },
+            { "pts": 10, "bonus": "Les découvertes inventives restituent +5% de concentration dépensée supplémentaire (enchantements de Midnight)" },
+            { "pts": 15, "bonus": "+10 Inventivité supplémentaire sous l'effet d'Essence fragmentée" },
+            { "pts": 20, "bonus": "Les découvertes inventives restituent +5% de concentration dépensée supplémentaire (enchantements de Midnight)" },
+            { "pts": 25, "bonus": "+20 Inventivité supplémentaire sous l'effet d'Essence fragmentée" },
+            { "pts": 30, "bonus": "Les découvertes inventives restituent +5% de concentration dépensée supplémentaire (enchantements de Midnight)" }
+          ]
+        },
+        {
+          "id": "fabrication_multiple_meticuleuse",
+          "nom": "Fabrication multiple méticuleuse",
+          "type": "sous-spécialisation",
+          "parent": "fracassement_envoute",
+          "deblocage_requis": "5/15/25 pts en Fracassement envoûté (ordre au choix)",
+          "max": 30,
+          "bonus_par_point": "+1 Fabrication multiple",
+          "paliers": [
+            { "pts": 0,  "bonus": "La Fabrication multiple permet d'obtenir jusqu'à +25% d'objets supplémentaires (création d'illusions)" },
+            { "pts": 5,  "bonus": "+5 Fabrication multiple supplémentaire sous l'effet d'Essence fragmentée" },
+            { "pts": 10, "bonus": "La Fabrication multiple permet d'obtenir jusqu'à +25% d'objets supplémentaires (création de consommables)" },
+            { "pts": 15, "bonus": "+10 Fabrication multiple supplémentaire sous l'effet d'Essence fragmentée" },
+            { "pts": 20, "bonus": "La Fabrication multiple permet d'obtenir jusqu'à +25% d'objets supplémentaires (création d'illusions)" },
+            { "pts": 25, "bonus": "+20 Fabrication multiple supplémentaire sous l'effet d'Essence fragmentée" },
+            { "pts": 30, "bonus": "La Fabrication multiple permet d'obtenir jusqu'à +25% d'objets supplémentaires (création de consommables)" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+;
+
+// État: {nodeId: pts}
+let talentPts = {};
+
+function loadTalents(){
+  try{const s=localStorage.getItem('pf_talents_v1');if(s){talentPts=JSON.parse(s);return;}}catch(e){}
+  talentPts={};
+}
+function saveTalents(){try{localStorage.setItem('pf_talents_v1',JSON.stringify(talentPts));}catch(e){}}
+function resetTalents(){
+  if(!confirm('Réinitialiser tous les points de talents ?'))return;
+  talentPts={};saveTalents();renderTalentsModal();updateTalentsBadge();
+}
+
+function getTalPts(id){return talentPts[id]||0;}
+
+// Vérifie si un nœud enfant est déverrouillé
+// parent doit avoir atteint le palier de déblocage (5/10/15/20/25 selon le cas)
+function isNodeUnlocked(node, allNodes){
+  if(!node.parent) return true; // racine toujours accessible
+  const parentPts = getTalPts(node.parent);
+  // Trouver le parent
+  const parentNode = findNodeById(node.parent, TALENTS_DATA.arbres);
+  if(!parentNode) return false;
+  // Les paliers de déblocage des enfants du parent
+  // On cherche les paliers "Déverrouille" dans le parent
+  const unlockPaliers = parentNode.paliers
+    .filter(p => typeof p.bonus === 'string' && p.bonus.includes('Déverrouille') ||
+                 Array.isArray(p.bonus) && p.bonus.some(b=>b.includes('Déverrouille')))
+    .map(p=>p.pts)
+    .filter(p=>p>0)
+    .sort((a,b)=>a-b);
+  // Compter combien d'enfants du parent ont déjà des points
+  const siblings = parentNode.enfants||[];
+  const unlockedSiblings = siblings.filter(s=>getTalPts(s.id)>0||s.id===node.id);
+  const slotNeeded = unlockedSiblings.indexOf(unlockedSiblings.find(s=>s.id===node.id));
+  const threshold = unlockPaliers[slotNeeded]||unlockPaliers[0]||5;
+  return parentPts >= threshold;
+}
+
+function findNodeById(id, trees){
+  for(const tree of trees){
+    if(tree.id===id)return tree;
+    const found = findNodeInChildren(id, tree.enfants||[]);
+    if(found)return found;
+  }
+  return null;
+}
+function findNodeInChildren(id, children){
+  for(const c of children){
+    if(c.id===id)return c;
+    const found=findNodeInChildren(id,c.enfants||[]);
+    if(found)return found;
+  }
+  return null;
+}
+
+function addTalPt(id){
+  const node=findNodeById(id,TALENTS_DATA.arbres);
+  if(!node)return;
+  if(!isNodeUnlocked(node,TALENTS_DATA.arbres))return;
+  if(getTalPts(id)>=node.max)return;
+  talentPts[id]=(talentPts[id]||0)+1;
+  saveTalents();renderTalentsModal();updateTalentsBadge();
+}
+function removeTalPt(id){
+  if(!getTalPts(id))return;
+  talentPts[id]=getTalPts(id)-1;
+  if(!talentPts[id])delete talentPts[id];
+  saveTalents();renderTalentsModal();updateTalentsBadge();
+}
+
+function getBonusLines(bonus){
+  if(Array.isArray(bonus))return bonus;
+  return [bonus];
+}
+
+// Rendu d'une card nœud talent (style visuel arbre)
+function renderTalCard(node, level){
+  const pts = getTalPts(node.id);
+  const max = node.max;
+  const pct = Math.round((pts/max)*100);
+  const unlocked = isNodeUnlocked(node, TALENTS_DATA.arbres);
+  const hasPts = pts > 0;
+
+  // Paliers : déverrouillage (pts=0) + atteints + prochain
+  const nextPts = node.paliers.filter(p=>p.pts>pts).map(p=>p.pts)[0];
+  const paliersToShow = node.paliers.filter(p=>{
+    if(p.pts===0) return true;
+    if(p.pts<=pts) return true;
+    if(p.pts===nextPts) return true;
+    return false;
+  });
+
+  let paliersHtml='';
+  paliersToShow.forEach(p=>{
+    const achieved = p.pts<=pts;
+    const isNext = p.pts===nextPts && !achieved;
+    const cls = achieved?'achieved':(isNext?'next':'');
+    getBonusLines(p.bonus).forEach(line=>{
+      const label = p.pts===0 ? '✦' : p.pts+'p';
+      paliersHtml+=`<div class="tal-palier-line ${cls}">
+        <span class="tal-palier-pts">${label}</span>
+        <span class="tal-palier-bonus">${esc(line)}</span>
+      </div>`;
+    });
+  });
+
+  // Tooltip = bonus_par_point + condition de déblocage
+  const tipLines = [node.bonus_par_point, node.deblocage_requis].filter(Boolean);
+  const tipHtml = tipLines.map(l=>`<div>${esc(l)}</div>`).join('');
+
+  // Connecteur horizontal si enfant (level>0 dans un bloc children)
+  const connHtml = level>0 ? `<div class="tal-connector-h"></div>` : '';
+
+  // Enfants récursifs
+  let childrenHtml = '';
+  if(node.enfants && node.enfants.length){
+    const childLevel = level+1;
+    const childrenCards = node.enfants.map(c=>renderTalCard(c, childLevel)).join('');
+    childrenHtml = `<div class="tal-children-block ${level>=2?'l3':''}">${childrenCards}</div>`;
+  }
+
+  return `<div class="tal-node-row">
+    <div class="tal-card ${hasPts?'has-pts':''} ${!unlocked?'locked':''}" id="talnode-${node.id}" style="position:relative;">
+      ${connHtml}
+      <div class="tal-card-tip">${tipHtml}</div>
+      <div class="tal-card-top">
+        <div class="tal-card-name">${esc(node.nom)}</div>
+        <div class="tal-pts-ctrl">
+          <button class="tal-pts-btn" onclick="removeTalPt('${node.id}')" ${pts===0?'disabled':''}>−</button>
+          <span class="tal-pts-val">${pts}<span class="tal-pts-max">/${max}</span></span>
+          <button class="tal-pts-btn" onclick="addTalPt('${node.id}')" ${!unlocked||pts>=max?'disabled':''}>+</button>
+        </div>
+      </div>
+      <div class="tal-bar"><div class="tal-bar-fill" style="width:${pct}%"></div></div>
+      <div class="tal-paliers">${paliersHtml}</div>
+    </div>
+    ${childrenHtml}
+  </div>`;
+}
+
+function renderTalentsModal(){
+  const el=document.getElementById('talents-modal-body');
+  if(!el)return;
+
+  // Deux colonnes : un arbre par cellule
+  const trees = TALENTS_DATA.arbres;
+  let h = `<div class="tal-trees-grid">`;
+  trees.forEach(tree=>{
+    const pts = getTalPts(tree.id);
+    const pct = Math.round((pts/tree.max)*100);
+    h += `<div class="tal-tree-wrap">
+      <div class="tal-tree-label">
+        <span>${esc(tree.nom)}</span>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--success);font-weight:700;">${pts}/${tree.max}</span>
+        <div class="tal-tree-label-bar"></div>
+      </div>
+      ${renderTalCard(tree, 0)}
+    </div>`;
+  });
+  h += `</div>`;
+  el.innerHTML = h;
+  updateTalSummary();
+}
+
+function updateTalSummary(){
+  const el=document.getElementById('tal-summary');
+  if(!el)return;
+  const total=Object.values(talentPts).reduce((s,v)=>s+v,0);
+  const trees=TALENTS_DATA.arbres.map(t=>({nom:t.nom.split(' ')[0],pts:getTalPts(t.id),max:t.max}));
+  let h=`<div class="tal-sum-item">Total : <span>${total}</span> pts</div>`;
+  trees.forEach(t=>{
+    if(getTalPts(t.nom)||true)
+      h+=`<div class="tal-sum-item">${esc(t.nom)} : <span>${t.pts}</span>/${t.max}</div>`;
+  });
+  el.innerHTML=h;
+}
+
+function updateTalentsBadge(){
+  const el=document.getElementById('talents-pts-badge');
+  if(!el)return;
+  const total=Object.values(talentPts).reduce((s,v)=>s+v,0);
+  el.textContent=total>0?`${total} pts`:'';
+  el.style.display=total>0?'':'none';
+}
+
+function openTalentsModal(){
+  renderTalentsModal();
+  document.getElementById('talents-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeTalentsModal(){
+  document.getElementById('talents-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function handleModalClick(e){
+  if(e.target===document.getElementById('talents-modal'))closeTalentsModal();
+}
+
 // ══════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════
 loadTheme();
+loadTalents();
+updateTalentsBadge();
+setMetier('cuisine');
 loadMerchants(); renderMerchants();
 loadSelectedPresets();
 loadRecipes(); renderRecipes(); renderRecipeGrid();
